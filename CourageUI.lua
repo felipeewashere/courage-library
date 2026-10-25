@@ -15443,6 +15443,9 @@
 						table.insert(
 							arg.connections,
 							userInputService.InputEnded:Connect(function(input)
+								if input.UserInputType ~= Enum.UserInputType.Keyboard then
+									return
+								end
 								if
 									type(library.MinimizeKeybind) == "table"
 									and library.MinimizeKeybind.Type == "Keybind"
