@@ -12176,6 +12176,7 @@ end
 							local v60 = v43(instance.Parent.tab)({
 								Title = arg3.Title,
 								Icon = arg3.Icon,
+								Accent = arg3.Accent,
 								Scope = v52,
 								IsCompact = arg.IsCompact,
 								OnSelected = arg.OnTabSelected,
@@ -14036,11 +14037,9 @@ end
 									v48:New("TextLabel")({
 										Name = "CollapsedMessage",
 										LayoutOrder = 1,
-										Visible = v48:Computed(function(arg4)
-											return arg4(tbl14.Collapsed)
-										end),
+										Visible = false,
 										FontFace = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Medium),
-										Text = "Click the arrow to expand this section and view all elements...",
+										Text = "",
 										TextColor3 = v47.FgTertiary,
 										TextSize = 15,
 										TextXAlignment = Enum.TextXAlignment.Left,
@@ -14371,6 +14370,13 @@ end
 						})
 
 						v48.add("Tabs", tbl14, arg.Title)
+
+						v51:Observer(tbl14.Selected):onChange(function()
+							if peek(tbl14.Selected) then
+								local setAccent = (getgenv and getgenv() or _G).CourageSetAccent
+								if setAccent then setAccent(arg.Accent) end
+							end
+						end)
 
 						v51:Observer(v55):onChange(function()
 							if peek(v55) and not v53 then
@@ -23778,9 +23784,28 @@ end
 					local scope = v46.Scope
 					local peek = v44.peek
 					local theme = v45.Theme
+					local accentState = scope:Value(false)
+					;(getgenv and getgenv() or _G).CourageSetAccent = function(color)
+						accentState:set(typeof(color) == "Color3" and color or false)
+					end
 
 					local function fn24(arg)
-						return v48.WithConfigDefaults(v47.getTheme(arg))
+						local base = v47.getTheme(arg)
+						local accent = peek(accentState)
+						if accent and type(base) == "table" then
+							base = table.clone(base)
+							base.AccentPrimary = accent
+							if type(base.navbar) == "table" then
+								base.navbar = table.clone(base.navbar)
+								local old = base.navbar.accentGradient
+								base.navbar.accentGradient = {
+									color = ColorSequence.new(accent, accent:Lerp(Color3.new(1, 1, 1), 0.4)),
+									transparency = old and old.transparency or NumberSequence.new(0),
+									rotation = old and old.rotation or 90,
+								}
+							end
+						end
+						return v48.WithConfigDefaults(base)
 					end
 
 					local function fn25()
@@ -23791,6 +23816,7 @@ end
 
 					fn25()
 					v44.Observer(scope, theme):onChange(fn25)
+					v44.Observer(scope, accentState):onChange(fn25)
 					local themeForScope = v48.GetThemeForScope(scope)
 					local tbl14 = {}
 
@@ -23802,6 +23828,7 @@ end
 
 					local v49 = scope:Computed(function(arg)
 						local v49 = arg(theme)
+						arg(accentState)
 						return fn24(v49).navbar
 					end)
 
