@@ -6,8 +6,8 @@
 
 	-- font globals the aux windows use; the hosted UI fallback refines these
 	-- with custom fonts, the default path keeps the stock Inter asset
-	__CH_FONT_BODY = __CH_FONT_BODY or "rbxassetid://12187365364"
-	__CH_BRAND_FONT = __CH_BRAND_FONT or "rbxassetid://12187365364"
+	__CH_FONT_BODY = __CH_FONT_BODY or "rbxasset://fonts/families/RobotoMono.json"
+	__CH_BRAND_FONT = __CH_BRAND_FONT or "rbxasset://fonts/families/RobotoMono.json"
 
 	do
 		local okCourage, resultCourage = pcall(function()
@@ -313,7 +313,7 @@
 								end
 
 								library.MinimizeKey = v57.MinimizeKey or Enum.KeyCode.LeftControl
-								library:SetTheme(v57.Theme or "obsidian")
+								library:SetTheme(v57.Theme or "nocturne")
 								v57.Scope = scope2
 								window = v44(components.window.window)(v57)
 								commandBar = v44(v43.systems.commandbar)
@@ -2998,7 +2998,7 @@
 								local v59 = arg3:New("TextLabel")({
 									Name = "ButtonText",
 									FontFace = Font.new(
-										"rbxassetid://12187365364",
+										"rbxasset://fonts/families/RobotoMono.json",
 										tbl14.FontWeight or Enum.FontWeight.Medium,
 										tbl14.FontStyle or Enum.FontStyle.Normal
 									),
@@ -3291,7 +3291,7 @@
 											scope2:New("TextLabel")({
 												Name = "Title",
 												FontFace = Font.new(
-													"rbxassetid://12187365364",
+													"rbxasset://fonts/families/RobotoMono.json",
 													Enum.FontWeight.Bold,
 													Enum.FontStyle.Normal
 												),
@@ -3310,7 +3310,7 @@
 											scope2:New("TextLabel")({
 												Name = "TextLabel",
 												FontFace = Font.new(
-													"rbxassetid://12187365364",
+													"rbxasset://fonts/families/RobotoMono.json",
 													Enum.FontWeight.Medium,
 													Enum.FontStyle.Normal
 												),
@@ -3332,7 +3332,7 @@
 									v52:set(scope2:New("TextBox")({
 										Name = "TextBox",
 										FontFace = Font.new(
-											"rbxassetid://12187365364",
+											"rbxasset://fonts/families/RobotoMono.json",
 											Enum.FontWeight.Medium,
 											Enum.FontStyle.Normal
 										),
@@ -3457,7 +3457,7 @@
 										v46:New("TextLabel")({
 											Name = "TextLabel",
 											FontFace = Font.new(
-												"rbxassetid://12187365364",
+												"rbxasset://fonts/families/RobotoMono.json",
 												Enum.FontWeight.SemiBold,
 												Enum.FontStyle.Normal
 											),
@@ -3473,7 +3473,7 @@
 										v46:New("TextLabel")({
 											Name = "TextLabel",
 											FontFace = Font.new(
-												"rbxassetid://12187365364",
+												"rbxasset://fonts/families/RobotoMono.json",
 												Enum.FontWeight.Medium,
 												Enum.FontStyle.Normal
 											),
@@ -3519,7 +3519,7 @@
 														arg3:New("TextLabel")({
 															Name = "TypeText",
 															FontFace = Font.new(
-																"rbxassetid://12187365364",
+																"rbxasset://fonts/families/RobotoMono.json",
 																Enum.FontWeight.Bold,
 																Enum.FontStyle.Normal
 															),
@@ -3962,7 +3962,7 @@
 													v53:New("TextLabel")({
 														Name = "Title",
 														FontFace = Font.new(
-															"rbxassetid://12187365364",
+															"rbxasset://fonts/families/RobotoMono.json",
 															Enum.FontWeight.Bold,
 															Enum.FontStyle.Normal
 														),
@@ -3982,7 +3982,7 @@
 													v53:New("TextLabel")({
 														Name = "Description",
 														FontFace = Font.new(
-															"rbxassetid://12187365364",
+															"rbxasset://fonts/families/RobotoMono.json",
 															Enum.FontWeight.Medium,
 															Enum.FontStyle.Normal
 														),
@@ -9470,8 +9470,8 @@
 
 			return (function()
 				return table.freeze({
-					Title = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
-					Body = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
+					Title = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
+					Body = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
 					Mono = Font.fromEnum(Enum.Font.RobotoMono),
 				})
 			end)()
@@ -12049,7 +12049,7 @@
 						local v54 = v52:New("TextLabel")({
 							Name = "TextLabel",
 							FontFace = Font.new(
-								"rbxassetid://12187365364",
+								"rbxasset://fonts/families/RobotoMono.json",
 								Enum.FontWeight.Medium,
 								Enum.FontStyle.Normal
 							),
@@ -12405,7 +12405,7 @@
 												Name = "Title",
 												BackgroundTransparency = 1,
 												FontFace = Font.new(
-													"rbxassetid://12187365364",
+													"rbxasset://fonts/families/RobotoMono.json",
 													Enum.FontWeight.Medium,
 													Enum.FontStyle.Normal
 												),
@@ -12455,7 +12455,7 @@
 											v55:New("TextLabel")({
 												Name = "Description",
 												BackgroundTransparency = 1,
-												FontFace = Font.new("rbxassetid://12187365364"),
+												FontFace = Font.new("rbxasset://fonts/families/RobotoMono.json"),
 												RichText = true,
 												Text = tbl16.Description,
 												TextColor3 = v53.FgTertiary,
@@ -12562,7 +12562,7 @@
 								Name = "DialogButton",
 								AutoButtonColor = false,
 								FontFace = Font.new(
-									"rbxassetid://12187365364",
+									"rbxasset://fonts/families/RobotoMono.json",
 									Enum.FontWeight.Medium,
 									Enum.FontStyle.Normal
 								),
@@ -13456,8 +13456,8 @@
 					local v45 = v43(utils.fusionUtils.combineProps)
 					local v46 = v43(instance.Parent.Parent.Parent.ui.adaptiveHighlight)
 					local tbl14 = {}
-					local font = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
-					local font2 = Font.new("rbxassetid://12187365364", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+					local font = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+					local font2 = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 
 					return function(arg)
 						local scope = arg.scope
@@ -13698,7 +13698,7 @@
 													scope:New("TextLabel")({
 														Name = "TagTitle",
 														FontFace = Font.new(
-															"rbxassetid://12187365364",
+															"rbxasset://fonts/families/RobotoMono.json",
 															Enum.FontWeight.Medium,
 															Enum.FontStyle.Normal
 														),
@@ -13953,7 +13953,7 @@
 											v48:New("TextLabel")({
 												Name = "Title",
 												FontFace = Font.new(
-													"rbxassetid://12187365364",
+													"rbxasset://fonts/families/RobotoMono.json",
 													Enum.FontWeight.SemiBold,
 													Enum.FontStyle.Normal
 												),
@@ -14001,7 +14001,7 @@
 										Visible = v48:Computed(function(arg4)
 											return arg4(tbl14.Collapsed)
 										end),
-										FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium),
+										FontFace = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Medium),
 										Text = "Click the arrow to expand this section and view all elements...",
 										TextColor3 = v47.FgTertiary,
 										TextSize = 15,
@@ -14233,7 +14233,7 @@
 								v51:New("TextLabel")({
 									Name = "TextLabel",
 									FontFace = Font.new(
-										"rbxassetid://12187365364",
+										"rbxasset://fonts/families/RobotoMono.json",
 										Enum.FontWeight.Medium,
 										Enum.FontStyle.Normal
 									),
@@ -14449,7 +14449,7 @@
 						v55:set(v51:New("TextLabel")({
 							Text = arg.Text or "Tooltip",
 							TextSize = 12,
-							FontFace = Font.new("rbxassetid://12187365364"),
+							FontFace = Font.new("rbxasset://fonts/families/RobotoMono.json"),
 							Size = UDim2.fromOffset(0, 0),
 							Position = UDim2.fromOffset(0, 0),
 							TextWrapped = false,
@@ -14531,7 +14531,7 @@
 								return 1 - math.clamp(arg2(v58), 0, 1)
 							end),
 							TextSize = 12,
-							FontFace = Font.new("rbxassetid://12187365364"),
+							FontFace = Font.new("rbxasset://fonts/families/RobotoMono.json"),
 							BackgroundTransparency = 1,
 							AutomaticSize = Enum.AutomaticSize.None,
 							Size = UDim2.fromScale(1, 1),
@@ -15120,7 +15120,7 @@
 							local v98 = v72:New("TextLabel")({
 								Name = "TagTitle",
 								FontFace = Font.new(
-									"rbxassetid://12187365364",
+									"rbxasset://fonts/families/RobotoMono.json",
 									Enum.FontWeight.Medium,
 									Enum.FontStyle.Normal
 								),
@@ -15677,8 +15677,8 @@
 			return (
 				(function()
 					local v44 = v43(instance.Parent.Parent.Parent.Parent.utils.pendingTasks)
-					local font = Font.new("rbxassetid://12187365364", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-					local font2 = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+					local font = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+					local font2 = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 					local n = 32
 					local v45 = 72
 					local n27 = 140
@@ -16325,7 +16325,7 @@
 								arg:New("TextLabel")({
 									Name = "StatusText",
 									FontFace = Font.new(
-										"rbxassetid://12187365364",
+										"rbxasset://fonts/families/RobotoMono.json",
 										Enum.FontWeight.Medium,
 										Enum.FontStyle.Normal
 									),
@@ -22567,7 +22567,7 @@
 
 					noGlobalStateNameds = {
 						DashboardScope = v45.Scope:innerScope(),
-						Theme = scope:Value("obsidian"),
+						Theme = scope:Value("nocturne"),
 						Objects = scope:Value({}),
 						Categorys = scope:Value({}),
 						Tabs = scope:Value({}),
@@ -24385,11 +24385,11 @@
 							glowTransparency = 0.42,
 							accentGradient = {
 								color = ColorSequence.new({
-									ColorSequenceKeypoint.new(0, rgb(106, 119, 239)),
-									ColorSequenceKeypoint.new(0.25, rgb(116, 132, 246)),
-									ColorSequenceKeypoint.new(0.5, rgb(129, 146, 250)),
-									ColorSequenceKeypoint.new(0.75, rgb(143, 164, 250)),
-									ColorSequenceKeypoint.new(1, rgb(157, 186, 249)),
+									ColorSequenceKeypoint.new(0, rgb(110, 60, 190)),
+									ColorSequenceKeypoint.new(0.25, rgb(130, 80, 210)),
+									ColorSequenceKeypoint.new(0.5, rgb(150, 100, 230)),
+									ColorSequenceKeypoint.new(0.75, rgb(170, 120, 245)),
+									ColorSequenceKeypoint.new(1, rgb(190, 140, 255)),
 								}),
 								transparency = NumberSequence.new(0),
 								rotation = 225,
@@ -24397,7 +24397,7 @@
 						},
 						BgBaseColor = rgb(14, 17, 28),
 						BgTintColor = rgb(25, 34, 59),
-						AccentPrimary = rgb(106, 119, 239),
+						AccentPrimary = rgb(110, 60, 190),
 						AccentSecondary = rgb(79, 190, 190),
 						AccentCaution = rgb(228, 177, 86),
 						AccentDestructive = rgb(229, 101, 119),
@@ -29289,7 +29289,7 @@
 							HeightSm = 24,
 							HeightMd = 28,
 							HeightLg = 36,
-							FontMain = Font.new("rbxassetid://12187365364"),
+							FontMain = Font.new("rbxasset://fonts/families/RobotoMono.json"),
 							FontMono = Font.fromName("RobotoMono"),
 							FontMainTitleSize = 15,
 							FontMainBodySize = 14,
