@@ -15769,10 +15769,11 @@
 						courageSuiteMenuItem.BackgroundColor3 = Color3.fromRGB(28, 29, 34)
 						courageSuiteMenuItem.BackgroundTransparency = 0
 						courageSuiteMenuItem.BorderSizePixel = 0
-						courageSuiteMenuItem.LayoutOrder = 1
-						courageSuiteMenuItem.Size = UDim2.new(1, 0, 0, guiObject.AbsoluteSize.Y)
+						courageSuiteMenuItem.AnchorPoint = Vector2.new(0.5, 0)
+						courageSuiteMenuItem.Position = UDim2.new(0.5, 0, 0, 40)
+						courageSuiteMenuItem.Size = UDim2.fromOffset(150, 28)
 						courageSuiteMenuItem.Text = ""
-						courageSuiteMenuItem.ZIndex = guiObject.ZIndex
+						courageSuiteMenuItem.ZIndex = 100
 
 						local uiCorner = Instance.new("UICorner")
 						uiCorner.CornerRadius = UDim.new(0, 6)
@@ -15852,16 +15853,21 @@
 							if courageSuiteMenuItem2 and courageSuiteMenuItem2.Parent then
 								return
 							end
-							local instance3, v47 = fn25(topBarApp)
-							if not instance3 or not v47 then
-								return
+							local instance3 = arg.CoreGui:FindFirstChild("CourageSuiteGui")
+							if not instance3 then
+								instance3 = Instance.new("ScreenGui")
+								instance3.Name = "CourageSuiteGui"
+								instance3.ResetOnSpawn = false
+								instance3.IgnoreGuiInset = true
+								instance3.DisplayOrder = 100
+								instance3.Parent = arg.CoreGui
 							end
 							local courageSuiteMenuItem = instance3:FindFirstChild("CourageSuiteMenuItem")
 							if courageSuiteMenuItem then
 								courageSuiteMenuItem2 = courageSuiteMenuItem
 								return
 							end
-							courageSuiteMenuItem2 = createTextButton(instance3, v47, window)
+							courageSuiteMenuItem2 = createTextButton(instance3, nil, window)
 
 							courageSuiteMenuItem2.Destroying:Connect(function()
 								if courageSuiteMenuItem2 == instance3 then
