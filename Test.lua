@@ -1,6 +1,25 @@
 -- Courage Hub UI backend (hosted separately, loaded by the hub via HttpGet).
 -- Contains the UI bundle plus the facade shim the hub's adapter speaks.
 
+-- Lucide icon helper: CourageLucide("name") -> { Url, ImageRectSize, ImageRectOffset } or nil. Source: Lucide.lua in this repo.
+do
+	local env = (getgenv and getgenv()) or _G
+	env.CourageLucide = function(name)
+		if type(name) ~= "string" or name == "" then return nil end
+		if env.__CourageLucideModule == nil then
+			env.__CourageLucideModule = false
+			pcall(function()
+				env.__CourageLucideModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/felipeewashere/courage-library/main/Lucide.lua"))()
+			end)
+		end
+		local module = env.__CourageLucideModule
+		if not module then return nil end
+		local ok, data = pcall(module.GetAsset, name)
+		if ok and type(data) == "table" and data.Url then return data end
+		return nil
+	end
+end
+
 	local CourageUI
 	local CourageLib = nil
 
@@ -12156,6 +12175,7 @@
 						tbl14.AddTab = function(arg2, arg3)
 							local v60 = v43(instance.Parent.tab)({
 								Title = arg3.Title,
+								Icon = arg3.Icon,
 								Scope = v52,
 								IsCompact = arg.IsCompact,
 								OnSelected = arg.OnTabSelected,
@@ -13967,6 +13987,24 @@
 												BorderSizePixel = 0,
 												AutomaticSize = Enum.AutomaticSize.X,
 												Size = UDim2.fromScale(0, 1),
+												[children] = (function()
+													local icon = (getgenv and getgenv() or _G).CourageLucide(arg.Icon)
+													if not icon then return nil end
+													return {
+														v48:New("UIPadding")({ PaddingLeft = UDim.new(0, 26) }),
+														v48:New("ImageLabel")({
+															Name = "SectionIcon",
+															Image = icon.Url,
+															ImageRectSize = icon.ImageRectSize,
+															ImageRectOffset = icon.ImageRectOffset,
+															ImageColor3 = v47.AccentPrimary,
+															BackgroundTransparency = 1,
+															AnchorPoint = Vector2.new(0, 0.5),
+															Position = UDim2.new(0, -26, 0.5, 0),
+															Size = UDim2.fromOffset(18, 18),
+														}),
+													}
+												end)(),
 											}),
 											track(
 												v50,
@@ -14257,6 +14295,33 @@
 									BorderSizePixel = 0,
 									Position = UDim2.fromOffset(15, 0),
 									Size = UDim2.new(1, -15, 0, -10),
+									[children] = (function()
+										local icon = (getgenv and getgenv() or _G).CourageLucide(arg.Icon)
+										if not icon then return nil end
+										return {
+											v51:New("UIPadding")({ PaddingLeft = UDim.new(0, 22) }),
+											v51:New("ImageLabel")({
+												Name = "TabIcon",
+												Image = icon.Url,
+												ImageRectSize = icon.ImageRectSize,
+												ImageRectOffset = icon.ImageRectOffset,
+												ImageColor3 = v44(function(arg2)
+													if arg2(tbl14.Selected) then
+														return arg2(v49.AccentPrimary)
+													end
+
+													if arg2(tbl14.Hovering) then
+														return arg2(v49.FgSecondary)
+													end
+													return arg2(v49.FgTertiary)
+												end, 25, 1, v51),
+												BackgroundTransparency = 1,
+												AnchorPoint = Vector2.new(0, 0.5),
+												Position = UDim2.new(0, -22, 0.5, 0),
+												Size = UDim2.fromOffset(16, 16),
+											}),
+										}
+									end)(),
 								}),
 								v51:New("Frame")({
 									Name = "Indicator",
@@ -14338,6 +14403,7 @@
 
 							tbl15.Component = v56({
 								Title = arg3.Title,
+								Icon = arg3.Icon,
 								Order = tbl14.nSections,
 								Collapsed = arg3.Collapsed,
 								Scope = v51,
@@ -15794,6 +15860,21 @@
 						courageMark.TextSize = 20
 						courageMark.ZIndex = courageSuiteMenuItem.ZIndex + 1
 						courageMark.Parent = courageSuiteMenuItem
+						local markIcon = (getgenv and getgenv() or _G).CourageLucide("shield")
+						if markIcon then
+							courageMark.Text = ""
+							local markImage = Instance.new("ImageLabel")
+							markImage.BackgroundTransparency = 1
+							markImage.Image = markIcon.Url
+							markImage.ImageRectSize = markIcon.ImageRectSize
+							markImage.ImageRectOffset = markIcon.ImageRectOffset
+							markImage.ImageColor3 = Color3.fromRGB(190, 140, 255)
+							markImage.AnchorPoint = Vector2.new(0.5, 0.5)
+							markImage.Position = UDim2.fromScale(0.5, 0.5)
+							markImage.Size = UDim2.fromOffset(18, 18)
+							markImage.ZIndex = courageSuiteMenuItem.ZIndex + 1
+							markImage.Parent = courageMark
+						end
 
 						local courageMenuLabel = Instance.new("TextLabel")
 						courageMenuLabel.Name = "CourageMenuLabel"
