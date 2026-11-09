@@ -15308,9 +15308,11 @@ end
 							input.ClipsDescendants, input.Parent = true, box
 							box.Parent = holder
 
-							local container = tbl14.RootFrame
+							-- The list hangs off the ScreenGui itself: inside the window, the title bar's drag area sat on top of its first rows
+							-- and swallowed their clicks. It hides when the window moves, since it no longer follows it.
+							local container = tbl14.RootFrame:FindFirstAncestorWhichIsA("ScreenGui") or tbl14.RootFrame
 							local list = Instance.new("ScrollingFrame")
-							list.Name, list.Visible, list.ZIndex, list.BorderSizePixel = "CourageSearchResults", false, 200, 0
+							list.Name, list.Visible, list.ZIndex, list.BorderSizePixel = "CourageSearchResults", false, 1000, 0
 							list.BackgroundColor3, list.ScrollBarThickness, list.ScrollBarImageColor3 = Color3.fromRGB(22, 22, 26), 3, Color3.fromRGB(90, 90, 100)
 							list.AutomaticCanvasSize, list.CanvasSize = Enum.AutomaticSize.Y, UDim2.new()
 							Instance.new("UICorner", list).CornerRadius = UDim.new(0, 6)
@@ -15320,6 +15322,7 @@ end
 							local padding = Instance.new("UIPadding", list)
 							padding.PaddingTop, padding.PaddingBottom = UDim.new(0, 4), UDim.new(0, 4)
 							list.Parent = container
+							tbl14.RootFrame:GetPropertyChangedSignal("AbsolutePosition"):Connect(function() list.Visible = false end)
 
 							-- A control counts only while its section lists it (hosts hide controls by taking them out of the list).
 							local function listed(entry, section)
@@ -15425,10 +15428,10 @@ end
 								for index = 1, shown do
 									local result = results[index]
 									local row = Instance.new("TextButton")
-									row.LayoutOrder, row.Size, row.ZIndex, row.AutoButtonColor = index, UDim2.new(1, 0, 0, ROW), 201, false
+									row.LayoutOrder, row.Size, row.ZIndex, row.AutoButtonColor = index, UDim2.new(1, 0, 0, ROW), 1001, false
 									row.BackgroundColor3, row.BackgroundTransparency, row.Text = Color3.fromRGB(45, 45, 52), 1, ""
 									local title = Instance.new("TextLabel")
-									title.BackgroundTransparency, title.Position, title.Size, title.ZIndex = 1, UDim2.fromOffset(10, 3), UDim2.new(1, -20, 0, 16), 202
+									title.BackgroundTransparency, title.Position, title.Size, title.ZIndex = 1, UDim2.fromOffset(10, 3), UDim2.new(1, -20, 0, 16), 1002
 									title.FontFace, title.TextSize, title.TextXAlignment, title.TextTruncate = font, 13, Enum.TextXAlignment.Left, Enum.TextTruncate.AtEnd
 									title.TextColor3, title.Text, title.Parent = Color3.fromRGB(235, 235, 240), result.title, row
 									local path = title:Clone()
@@ -15441,10 +15444,13 @@ end
 								end
 								if shown == 0 then
 									local none = Instance.new("TextLabel")
-									none.BackgroundTransparency, none.Size, none.ZIndex, none.FontFace, none.TextSize = 1, UDim2.new(1, 0, 0, ROW), 201, font, 13
+									none.BackgroundTransparency, none.Size, none.ZIndex, none.FontFace, none.TextSize = 1, UDim2.new(1, 0, 0, ROW), 1001, font, 13
 									none.TextColor3, none.Text, none.Parent = Color3.fromRGB(130, 130, 145), "No features found", list
 								end
 								list.Size = UDim2.fromOffset(WIDTH, math.min(math.max(shown, 1), MAX_ROWS) * ROW + 8)
+								-- the window is not in its ScreenGui yet when this is built, so the top layer is looked up here
+								container = tbl14.RootFrame:FindFirstAncestorWhichIsA("ScreenGui") or container
+								if list.Parent ~= container then list.Parent = container end
 								local origin = container.AbsolutePosition
 								list.Position = UDim2.fromOffset(box.AbsolutePosition.X + box.AbsoluteSize.X - WIDTH - origin.X, box.AbsolutePosition.Y + box.AbsoluteSize.Y + 6 - origin.Y)
 								list.CanvasPosition = Vector2.zero
