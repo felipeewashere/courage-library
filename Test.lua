@@ -11797,7 +11797,7 @@ end
 									end
 									local absolutePosition = guiObject.AbsolutePosition
 									local absoluteSize = guiObject.AbsoluteSize
-									local mouseLocation = userInputService:GetMouseLocation()
+									local mouseLocation = userInputService:GetMouseLocation() - game:GetService("GuiService"):GetGuiInset()
 
 									if
 										mouseLocation.X < absolutePosition.X
@@ -12189,6 +12189,7 @@ end
 								categoryId = tbl14.AgentContext and tbl14.AgentContext.categoryId or nil,
 								categoryTitle = tbl14.AgentContext and tbl14.AgentContext.categoryTitle or "",
 							})
+							v61.object = v60 -- the title bar search selects tabs through the registry
 
 							v60.AgentContext = {
 								windowTitle = tbl14.AgentContext and tbl14.AgentContext.windowTitle or "",
@@ -12760,7 +12761,9 @@ end
 								local guiObject = peek(v56)
 								local absolutePosition = guiObject.AbsolutePosition
 								local absoluteSize = guiObject.AbsoluteSize
-								local mouseLocation = userInputService:GetMouseLocation()
+								-- AbsolutePosition sits below the top bar inset, the mouse does not: without this the dialog's
+								-- bottom strip (its buttons) counted as outside and a held click closed it before it landed.
+								local mouseLocation = userInputService:GetMouseLocation() - game:GetService("GuiService"):GetGuiInset()
 								if
 									mouseLocation.X < absolutePosition.X
 									or mouseLocation.X > absolutePosition.X + absoluteSize.X
@@ -14417,6 +14420,7 @@ end
 							tbl15.Container = tbl15.Component.Components
 							tbl15.Scope = tbl15.Component.Scope
 							tbl15.Side = arg3.Side or tbl14.nSections % 2 == 0 and "left" or "right"
+							v57.object = tbl15
 
 							tbl15.AgentContext = {
 								windowTitle = tbl14.AgentContext and tbl14.AgentContext.windowTitle or "",
@@ -15260,6 +15264,8 @@ end
 								sectionKind = v98.kind,
 							}
 							local v99 = tbl15.Component:Render(v72)
+							v98.object = tbl15
+							v98.root = v99
 							v45(tbl14.ClientControlContainer.Sections, v99)
 							local clientControlContainer = tbl14.ClientControlContainer
 							clientControlContainer.nSections += 1
@@ -15267,6 +15273,191 @@ end
 							setmetatable(tbl15, v100)
 							return tbl15
 						end
+
+						-- Title bar search (left of the close X): finds any control by its title and jumps to it (opens its tab or the
+						-- settings panel, expands its section, scrolls to it and outlines it for a moment).
+						task.spawn(function()
+							local topbar
+							for _ = 1, 100 do
+								topbar = peek(v78)
+								if topbar and topbar:FindFirstChild("ButtonHolder") then break end
+								task.wait(0.1)
+							end
+							if not topbar then return end
+							local holder = topbar.ButtonHolder
+							local font = Font.new("rbxasset://fonts/families/RobotoMono.json")
+							local box = Instance.new("Frame")
+							box.Name, box.LayoutOrder, box.Size = "CourageSearch", -1, UDim2.fromOffset(170, 24)
+							box.BackgroundColor3 = Color3.fromRGB(28, 28, 32)
+							Instance.new("UICorner", box).CornerRadius = UDim.new(0, 5)
+							local stroke = Instance.new("UIStroke", box)
+							stroke.ApplyStrokeMode, stroke.Color, stroke.Transparency = Enum.ApplyStrokeMode.Border, Color3.fromRGB(70, 70, 80), 0.3
+							local lucide = (getgenv and getgenv() or _G).CourageLucide
+							local icon = lucide and lucide("search")
+							if icon then
+								local image = Instance.new("ImageLabel")
+								image.BackgroundTransparency, image.Size, image.Position, image.AnchorPoint = 1, UDim2.fromOffset(13, 13), UDim2.new(0, 8, 0.5, 0), Vector2.new(0, 0.5)
+								image.Image, image.ImageRectSize, image.ImageRectOffset, image.ImageColor3 = icon.Url, icon.ImageRectSize, icon.ImageRectOffset, Color3.fromRGB(150, 150, 165)
+								image.Parent = box
+							end
+							local input = Instance.new("TextBox")
+							input.Name, input.BackgroundTransparency, input.ClearTextOnFocus = "Query", 1, false
+							input.Position, input.Size = UDim2.fromOffset(icon and 27 or 8, 0), UDim2.new(1, icon and -33 or -14, 1, 0)
+							input.FontFace, input.TextSize, input.Text, input.PlaceholderText = font, 13, "", "Search features"
+							input.TextColor3, input.PlaceholderColor3, input.TextXAlignment = Color3.fromRGB(235, 235, 240), Color3.fromRGB(120, 120, 135), Enum.TextXAlignment.Left
+							input.ClipsDescendants, input.Parent = true, box
+							box.Parent = holder
+
+							local container = tbl14.RootFrame
+							local list = Instance.new("ScrollingFrame")
+							list.Name, list.Visible, list.ZIndex, list.BorderSizePixel = "CourageSearchResults", false, 200, 0
+							list.BackgroundColor3, list.ScrollBarThickness, list.ScrollBarImageColor3 = Color3.fromRGB(22, 22, 26), 3, Color3.fromRGB(90, 90, 100)
+							list.AutomaticCanvasSize, list.CanvasSize = Enum.AutomaticSize.Y, UDim2.new()
+							Instance.new("UICorner", list).CornerRadius = UDim.new(0, 6)
+							local listStroke = Instance.new("UIStroke", list)
+							listStroke.ApplyStrokeMode, listStroke.Color, listStroke.Transparency = Enum.ApplyStrokeMode.Border, Color3.fromRGB(70, 70, 80), 0.3
+							Instance.new("UIListLayout", list).SortOrder = Enum.SortOrder.LayoutOrder
+							local padding = Instance.new("UIPadding", list)
+							padding.PaddingTop, padding.PaddingBottom = UDim.new(0, 4), UDim.new(0, 4)
+							list.Parent = container
+
+							-- A control counts only while its section lists it (hosts hide controls by taking them out of the list).
+							local function listed(entry, section)
+								local object = section and section.object
+								if not object then return true end
+								for _, item in ipairs(peek(object.Component.Components) or {}) do
+									if item == entry.raw then return true end
+									if type(item) == "table" then
+										for _, value in pairs(item) do if value == entry.raw then return true end end
+									end
+								end
+								return false
+							end
+
+							local function find(query)
+								local controls, _, sections = v48.searchIndex()
+								local results, seen = {}, {}
+								for _, entry in ipairs(controls) do
+									local title = type(entry.title) == "string" and entry.title or ""
+									local section = sections[entry.sectionId]
+									local key = tostring(entry.sectionId) .. "|" .. title
+									if title ~= "" and not seen[key] and title:lower():find(query, 1, true) and listed(entry, section) then
+										seen[key] = true
+										local where = section and section.kind == "client_control" and "Settings" or entry.tabTitle
+										table.insert(results, { entry = entry, title = title, where = tostring(where) .. " > " .. tostring(entry.sectionTitle) })
+									end
+								end
+								table.sort(results, function(a, b)
+									local aStart, bStart = a.title:lower():sub(1, #query) == query, b.title:lower():sub(1, #query) == query
+									if aStart ~= bStart then return aStart end
+									return #a.title < #b.title
+								end)
+								return results
+							end
+
+							local function goTo(entry)
+								local _, tabs, sections = v48.searchIndex()
+								local section = sections[entry.sectionId]
+								if not section or not section.object then return end
+								local root
+								if section.kind == "client_control" then
+									local gear, panel
+									for _, object in ipairs(tbl14.RootFrame:GetDescendants()) do
+										if object.Name == "ClientControlContainer" then
+											if object:IsA("ImageButton") then gear = object elseif object:IsA("ScrollingFrame") then panel = object end
+										end
+									end
+									if gear and panel and not panel.Visible and firesignal then pcall(firesignal, gear.Activated) end
+									root = section.root
+									if root then root.Visible = true end
+								else
+									local tab = tabs[entry.tabId]
+									if tab and tab.object then
+										for _, other in pairs(tabs) do
+											if other.object then pcall(function() other.object.Selected:set(other == tab) end) end
+										end
+									end
+								end
+								pcall(function() section.object.Component.Collapsed:set(false) end)
+								task.spawn(function()
+									local target
+									for _ = 1, 30 do
+										root = root or section.object.Component.Root
+										if typeof(root) == "Instance" and root.Parent and root.AbsoluteSize.Y > 0 then
+											for _, label in ipairs(root:GetDescendants()) do
+												if label:IsA("TextLabel") and label.Text == entry.title and label.AbsoluteSize.Y > 0 then target = label break end
+											end
+											if target then break end
+										end
+										task.wait(0.05)
+									end
+									target = target and (target.Parent:IsA("GuiObject") and target.Parent or target) or root
+									if typeof(target) ~= "Instance" then return end
+									task.wait(0.2) -- the expanded section grows the canvas over a few frames
+									local scroll = target:FindFirstAncestorWhichIsA("ScrollingFrame")
+									if scroll then
+										local offset = target.AbsolutePosition.Y - scroll.AbsolutePosition.Y + scroll.CanvasPosition.Y - scroll.AbsoluteSize.Y / 3
+										scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.max(0, offset))
+									end
+									local flash = Instance.new("UIStroke")
+									flash.ApplyStrokeMode, flash.Thickness, flash.Color = Enum.ApplyStrokeMode.Border, 1.5, peek(v59.AccentPrimary)
+									flash.Parent = target
+									game:GetService("TweenService"):Create(flash, TweenInfo.new(1.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Transparency = 1 }):Play()
+									game:GetService("Debris"):AddItem(flash, 1.7)
+								end)
+							end
+
+							local ROW, WIDTH, MAX_ROWS = 34, 300, 8
+							local results = {}
+							local function hide() list.Visible = false end
+							local function choose(result)
+								hide()
+								input.Text = ""
+								input:ReleaseFocus()
+								goTo(result.entry)
+							end
+							local function refresh()
+								for _, child in ipairs(list:GetChildren()) do if child:IsA("GuiButton") or child:IsA("TextLabel") then child:Destroy() end end
+								local query = input.Text:lower():gsub("^%s+", ""):gsub("%s+$", "")
+								if query == "" then results = {} hide() return end
+								results = find(query)
+								local shown = math.min(#results, 50)
+								for index = 1, shown do
+									local result = results[index]
+									local row = Instance.new("TextButton")
+									row.LayoutOrder, row.Size, row.ZIndex, row.AutoButtonColor = index, UDim2.new(1, 0, 0, ROW), 201, false
+									row.BackgroundColor3, row.BackgroundTransparency, row.Text = Color3.fromRGB(45, 45, 52), 1, ""
+									local title = Instance.new("TextLabel")
+									title.BackgroundTransparency, title.Position, title.Size, title.ZIndex = 1, UDim2.fromOffset(10, 3), UDim2.new(1, -20, 0, 16), 202
+									title.FontFace, title.TextSize, title.TextXAlignment, title.TextTruncate = font, 13, Enum.TextXAlignment.Left, Enum.TextTruncate.AtEnd
+									title.TextColor3, title.Text, title.Parent = Color3.fromRGB(235, 235, 240), result.title, row
+									local path = title:Clone()
+									path.Position, path.Size, path.TextSize, path.TextColor3, path.Text = UDim2.fromOffset(10, 18), UDim2.new(1, -20, 0, 13), 11, Color3.fromRGB(130, 130, 145), result.where
+									path.Parent = row
+									row.MouseEnter:Connect(function() row.BackgroundTransparency = 0 end)
+									row.MouseLeave:Connect(function() row.BackgroundTransparency = 1 end)
+									row.Activated:Connect(function() choose(result) end)
+									row.Parent = list
+								end
+								if shown == 0 then
+									local none = Instance.new("TextLabel")
+									none.BackgroundTransparency, none.Size, none.ZIndex, none.FontFace, none.TextSize = 1, UDim2.new(1, 0, 0, ROW), 201, font, 13
+									none.TextColor3, none.Text, none.Parent = Color3.fromRGB(130, 130, 145), "No features found", list
+								end
+								list.Size = UDim2.fromOffset(WIDTH, math.min(math.max(shown, 1), MAX_ROWS) * ROW + 8)
+								local origin = container.AbsolutePosition
+								list.Position = UDim2.fromOffset(box.AbsolutePosition.X + box.AbsoluteSize.X - WIDTH - origin.X, box.AbsolutePosition.Y + box.AbsoluteSize.Y + 6 - origin.Y)
+								list.CanvasPosition = Vector2.zero
+								list.Visible = true
+							end
+							input:GetPropertyChangedSignal("Text"):Connect(refresh)
+							input.Focused:Connect(function() if input.Text ~= "" then refresh() end end)
+							input.FocusLost:Connect(function(enterPressed)
+								if enterPressed and results[1] then choose(results[1]) return end
+								-- Clicking a result also takes focus away: give its Activated a moment before closing the list.
+								task.delay(0.25, function() if not input:IsFocused() then hide() end end)
+							end)
+						end)
 
 						v52.Maid:GiveTask(function()
 							pcall(function()
@@ -26534,6 +26725,8 @@ end
 								getChoices = arg.getChoices,
 								trigger = arg.trigger,
 								raw = arg.element,
+								tabId = context.tabId,
+								sectionId = context.sectionId,
 							}
 
 							local writable
@@ -26688,6 +26881,9 @@ end
 								hasMore = n29 < #tbl16,
 								controls = tbl17,
 							}
+						end,
+						searchIndex = function() -- raw entries for the title bar search
+							return tbl14.controlOrder, tbl14.tabs, tbl14.sections
 						end,
 						searchControls = function(arg)
 							if type(arg) ~= "table" then
