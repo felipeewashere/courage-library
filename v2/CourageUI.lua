@@ -1645,94 +1645,126 @@ __DARKLUA_BUNDLE_MODULES.o()local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v
 then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end
 do local function __modImpl()return function(Library)local Util=Library.Util
 local New=Util.New local Services=Util.Services local Assets=Library.Assets
-local CELL=256 local EYES={Vector2.new(0.3337,0.6982),Vector2.new(0.6633,0.6982)
-}local IRIS=0.118 local REACH=0.034 local OPEN,HALF,SHUT,HAPPY,WAVE_A,WAVE_B,
-LOVE=1,3,4,5,6,7,8 local SNIFF,SNEEZE,STARTLED,YAWN,SLEEP_IN,SLEEP_OUT,GRUMPY,
-LICK=9,10,11,12,13,14,15,16 local WIDTH=140 local PAWS=12 local NAP_AFTER=25
-Library._Cat=function(root)local Cat={Active=false,Ready=false,Asleep=false,Busy
-=false}local holder=New('TextButton',{Name='Cat',Text='',AutoButtonColor=false,
-AnchorPoint=Vector2.new(0.5,1),Position=UDim2.new(0.5,0,0,PAWS),Size=UDim2.
-fromOffset(WIDTH,WIDTH+10),BackgroundTransparency=1,ClipsDescendants=true,
-Visible=false,ZIndex=70,Parent=root})local sprite=New('ImageLabel',{AnchorPoint=
-Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(1,WIDTH/
-(WIDTH+10)),BackgroundTransparency=1,ImageRectSize=Vector2.new(CELL,CELL),ZIndex
-=70,Parent=holder})local baseSize=sprite.Size local irises={}for index,centre in
-ipairs(EYES)do irises[index]=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,0.5),
-Position=UDim2.fromScale(centre.X,centre.Y),Size=UDim2.fromScale(IRIS,IRIS),
-BackgroundTransparency=1,ZIndex=71,Parent=sprite})end local heart local look=
-Vector2.zero local token,streak,lastPet=0,0,0 local lastMouse,lastMove=Vector2.
-zero,os.clock()local nextBlink=os.clock()+3 local nextSneeze=os.clock()+math.
-random(45,100)local nextLick=os.clock()+math.random(30,70)local nextRoam=os.
-clock()+math.random(50,110)local nextZ=0 local dragging=false local function 
-show(pose)Cat.Pose=pose sprite.ImageRectOffset=Vector2.new((pose-1)%4*CELL,math.
-floor((pose-1)/4)*CELL)for _,iris in ipairs(irises)do iris.Visible=pose==OPEN
-end end local function play(steps,done)token=token+1 local mine=token Cat.Busy,
-Cat.Asleep=true,false task.spawn(function()for _,step in ipairs(steps)do show(
-step[1])if step[3]then step[3]()end task.wait(step[2])if token~=mine then return
-end end Cat.Busy=false lastMove=os.clock()if done then done()else show(OPEN)end
-end)end local function slide(offset,seconds,style)Util.Tween(sprite,seconds,{
-Position=UDim2.new(0.5,0,1,offset)},style)end local function hop()slide(-8,0.12,
-Enum.EasingStyle.Quad)task.delay(0.12,function()slide(0,0.4,Enum.EasingStyle.
-Bounce)end)end local function tilt(angle)Util.Tween(sprite,0.18,{Rotation=angle}
-,Enum.EasingStyle.Back)end local function float(isHeart,side,size)local at=
-holder.Position local props={AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.
-new(at.X.Scale,side,0,-WIDTH*0.55),Size=UDim2.fromOffset(size,size),
-BackgroundTransparency=1,ZIndex=72,Parent=root}local item,goal if isHeart then
-if not heart then return end props.Image,props.ScaleType=heart,Enum.ScaleType.
-Fit item,goal=New('ImageLabel',props),{ImageTransparency=1}else props.Text,props
-.Font,props.TextSize,props.TextColor3='z',Enum.Font.GothamBold,size,Color3.
-fromRGB(206,170,255)item,goal=New('TextLabel',props),{TextTransparency=1}end
-goal.Position=UDim2.new(at.X.Scale,side+math.random(-14,14),0,-WIDTH*0.55-42)
-goal.Rotation=math.random(-18,18)local tween=Services.TweenService:Create(item,
-TweenInfo.new(1.4,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),goal)tween.
-Completed:Once(function()item:Destroy()end)tween:Play()end local function hearts
-(count)for index=1,count do task.delay((index-1)*0.14,function()float(true,math.
-random(-40,40),math.random(14,20))end)end end local function sleep()play({{HALF,
-0.6},{YAWN,1.1},{HALF,0.6},{SHUT,0.4}},function()Cat.Asleep=true nextZ=os.clock(
-)+0.5 end)end function Cat:Pet()if not self.Ready then return end local now=os.
-clock()if self.Asleep then play({{STARTLED,0.45,hop},{GRUMPY,1.4}})return end
-streak=now-lastPet<1.6 and streak+1 or 1 lastPet=now if streak>=3 then streak=0
-play({{LOVE,1.9,function()hop()hearts(5)end}})else play({{HAPPY,1.1,function()
-hop()hearts(2)end}})end end function Cat:Sneeze()if not self.Ready then return
-end play({{SNIFF,0.55,function()tilt(-5)end},{SNEEZE,0.34,function()tilt(7)
-slide(5,0.08)end},{SNIFF,0.2,function()tilt(0)slide(0,0.2)end},{HALF,0.25}})end
-function Cat:Wave()if not self.Ready then return end play({{WAVE_A,0.17},{WAVE_B
-,0.17},{WAVE_A,0.17},{WAVE_B,0.17},{WAVE_A,0.17},{HAPPY,0.4}})end function Cat:
-Roam()if not self.Ready then return end local target=0.15+math.random()*0.7
-play({{STARTLED,0.25},{OPEN,0.45,function()slide(WIDTH,0.4,Enum.EasingStyle.Quad
-)end},{OPEN,0.05,function()holder.Position=UDim2.new(target,0,0,PAWS)end},{HAPPY
-,0.8,function()slide(0,0.45,Enum.EasingStyle.Back)end}})end function Cat:
-SetActive(active)self.Active=active if active then self:Wave()end end function
-Cat:SetVisible(visible)self.Hidden=visible==false holder.Visible=not self.Hidden
-and self.Ready end local pressAt,pressScale Util.Drag(holder,function(pointer)
-pressAt,pressScale,dragging=pointer,holder.Position.X.Scale,false end,function(
-pointer)local delta=pointer.X-pressAt.X if not dragging and math.abs(delta)>6
-then dragging=true play({{STARTLED,600}})end if dragging then holder.Position=
-UDim2.new(math.clamp(pressScale+delta/root.AbsoluteSize.X,0.1,0.9),0,0,PAWS)end
-end,function()if dragging then dragging=false play({{HAPPY,0.6,hop}})else Cat:
-Pet()end end)Library:GiveSignal(Services.RunService.RenderStepped:Connect(
-function(dt)if not Cat.Active or not Cat.Ready or Cat.Hidden then return end
-local now=os.clock()local mouse=Util.Mouse()local moved=(mouse-lastMouse).
-Magnitude>1 if moved then lastMouse,lastMove=mouse,now end if Cat.Asleep then
-show(now%3.2<1.6 and SLEEP_IN or SLEEP_OUT)if now>nextZ then nextZ=now+1.6
-float(false,34,math.random(13,19))end if moved and(mouse-(holder.
-AbsolutePosition+holder.AbsoluteSize/2)).Magnitude<200 then play({{STARTLED,0.55
-,hop}})end return end if Cat.Busy then return end sprite.Size=baseSize+UDim2.
-fromOffset(0,math.sin(now*2.2)*1.4)local centre=sprite.AbsolutePosition+sprite.
-AbsoluteSize*Vector2.new(0.5,EYES[1].Y)local delta=mouse-centre local length=
-delta.Magnitude local goal=length>0 and delta/length*math.min(length/90,1)*REACH
-or Vector2.zero look=look:Lerp(goal,1-math.exp(-dt*14))for index,iris in ipairs(
-irises)do iris.Position=UDim2.fromScale(EYES[index].X+look.X,EYES[index].Y+look.
-Y)end if now-lastMove>NAP_AFTER then sleep()elseif now>nextSneeze then
-nextSneeze=now+math.random(45,100)Cat:Sneeze()elseif now>nextLick then nextLick=
-now+math.random(30,70)play({{LICK,0.32},{SHUT,0.14},{LICK,0.32},{SHUT,0.14},{
-LICK,0.32}})elseif now>nextRoam then nextRoam=now+math.random(50,110)Cat:Roam()
-elseif now>nextBlink then nextBlink=now+2+math.random()*4 play({{HALF,0.05},{
-SHUT,0.09},{HALF,0.05}})end end))task.spawn(function()local sheet=Assets.Get(
-'cat/sheet.png')local iris=Assets.Get('cat/iris.png')if not sheet or not iris
-then return end heart=Assets.Get('cat/heart.png')sprite.Image=sheet for _,image
-in ipairs(irises)do image.Image=iris end show(OPEN)Cat.Ready=true holder.Visible
-=not Cat.Hidden if Cat.Active then Cat:Wave()end end)return Cat end end end
+local CELL=160 local RUN={5,6}local COLS=5 local SIT,BLINK,HAPPY,LOVE,LICK,YAWN,
+SLEEP_IN,SLEEP_OUT,STARTLED,DANGLE,WASH,DROWSY=7,8,9,10,11,12,13,14,15,16,17,18
+local NAP_AFTER=20 Library._Cat=function(root)local SIZE=math.floor(52*(Library.
+DPIScale or 1))local Cat={Active=false,Ready=false,Asleep=false,Busy=false}local
+layer=New('Frame',{Name='Cat',Size=UDim2.fromScale(1,1),BackgroundTransparency=1
+,Visible=false,ZIndex=3,Parent=Library.ScreenGui})local holder=New('Frame',{
+AnchorPoint=Vector2.new(0.5,1),Size=UDim2.fromOffset(SIZE,SIZE),
+BackgroundTransparency=1,Parent=layer})local sprite=New('ImageLabel',{
+AnchorPoint=Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),Size=UDim2.
+fromScale(1,1),BackgroundTransparency=1,Parent=holder})local hit=New(
+'TextButton',{Text='',AutoButtonColor=false,AnchorPoint=Vector2.new(0.5,1),
+Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(0.6,0.75),
+BackgroundTransparency=1,Parent=holder})local heart local pos=Vector2.zero local
+perched,perchX,strollTo=true,0,nil local facing=1 local phase,phaseUntil,tired=
+'home',0,false local jump,held,seen=nil,false,false local token,streak,lastPet=0
+,0,0 local lastMouse,lastMove=Vector2.zero,os.clock()local nextBlink,nextFidget,
+nextStroll,nextZ,wakeAt=0,os.clock()+8,os.clock()+4,0,0 local running,swing,
+lastHeldX=false,0,0 local function inset()return Services.GuiService:
+GetGuiInset()end local function edge(x)local at,size=root.AbsolutePosition,root.
+AbsoluteSize return Vector2.new(at.X+math.clamp(x,26,math.max(26,size.X-26)),at.
+Y+3)end local function place()local offset=inset()holder.Position=UDim2.
+fromOffset(pos.X+offset.X,pos.Y+offset.Y)end local function show(pose)Cat.Pose=
+pose local x,y=(pose-1)%COLS*CELL,math.floor((pose-1)/COLS)*CELL sprite.
+ImageRectOffset=Vector2.new(facing<0 and x+CELL or x,y)sprite.ImageRectSize=
+Vector2.new(facing<0 and-CELL or CELL,CELL)end local function play(steps,done)
+token=token+1 local mine=token Cat.Busy,Cat.Asleep=true,false task.spawn(
+function()for _,step in ipairs(steps)do show(step[1])if step[3]then step[3]()end
+task.wait(step[2])if token~=mine then return end end Cat.Busy=false if done then
+done()else show(SIT)end end)end local function hop()Util.Tween(sprite,0.12,{
+Position=UDim2.new(0.5,0,1,-10)},Enum.EasingStyle.Quad)task.delay(0.12,function(
+)Util.Tween(sprite,0.4,{Position=UDim2.fromScale(0.5,1)},Enum.EasingStyle.Bounce
+)end)end local function float(isHeart,side,size)local offset=inset()local x,y=
+pos.X+offset.X+side,pos.Y+offset.Y-SIZE*(isHeart and 0.8 or 0.5)local props={
+AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromOffset(x,y),Size=UDim2.
+fromOffset(size,size),BackgroundTransparency=1,Parent=layer}local item,goal if
+isHeart then if not heart then return end props.Image,props.ScaleType=heart,Enum
+.ScaleType.Fit item,goal=New('ImageLabel',props),{ImageTransparency=1}else props
+.Text,props.Font,props.TextSize,props.TextColor3='z',Enum.Font.GothamBold,size,
+Color3.fromRGB(206,170,255)item,goal=New('TextLabel',props),{TextTransparency=1}
+end goal.Position=UDim2.fromOffset(x+math.random(-12,12),y-34)goal.Rotation=math
+.random(-18,18)local tween=Services.TweenService:Create(item,TweenInfo.new(1.4,
+Enum.EasingStyle.Sine,Enum.EasingDirection.Out),goal)tween.Completed:Once(
+function()item:Destroy()end)tween:Play()end local function hearts(count)for
+index=1,count do task.delay((index-1)*0.14,function()float(true,math.random(-18,
+18),math.random(10,15))end)end end local function sleep()play({{DROWSY,0.8},{
+YAWN,1},{DROWSY,0.7}},function()Cat.Asleep=true nextZ=os.clock()+0.5 wakeAt=os.
+clock()+math.random(25,45)end)end local function rested(delay)tired,strollTo=
+false,nil phase,phaseUntil='home',os.clock()+delay end local function leap(to,
+done)local distance=(to()-pos).Magnitude jump={from=pos,to=to,start=os.clock(),
+time=0.3+distance/600,height=26+distance*0.25,done=done}end local function 
+finishJump()local done=jump.done pos,jump=jump.to(),nil done()end local function 
+step(target,dt,now)local delta=target-pos local distance=delta.Magnitude if
+distance<2 then return true end if distance>260 then running=true elseif
+distance<120 then running=false end pos=pos+delta/distance*math.min(distance,(
+running and 340 or 110)*dt)if math.abs(delta.X)>2 then facing=delta.X>0 and 1 or
+-1 end show(RUN[math.floor(now*(running and 9 or 5))%#RUN+1])return false end
+local function idle(now)show(SIT)sprite.Size=UDim2.new(1,0,1,math.sin(now*2.2)*
+1.2)if now>nextBlink then nextBlink=now+2+math.random()*4 play({{BLINK,0.12}})
+elseif now>nextFidget then nextFidget=now+math.random(10,22)if math.random()<0.6
+then play({{LICK,0.35},{WASH,0.35},{LICK,0.35},{WASH,0.35},{LICK,0.35}})else
+play({{YAWN,0.9},{DROWSY,0.3}})end end end function Cat:Pet()if not self.Ready
+then return end local now=os.clock()if self.Asleep then play({{STARTLED,0.5,hop}
+,{DROWSY,0.9}})rested(math.random(3,6))return end streak=now-lastPet<1.6 and
+streak+1 or 1 lastPet=now if streak>=3 then streak=0 play({{LOVE,1.9,function()
+hop()hearts(5)end}})else play({{HAPPY,1.1,function()hop()hearts(2)end}})end end
+function Cat:SetActive(active)self.Active=active layer.Visible=active and self.
+Ready and not self.Hidden if not active then if jump then finishJump()end return
+end lastMouse=Util.Mouse()if seen then token=token+1 self.Busy,self.Asleep=false
+,true wakeAt=os.clock()+math.random(6,10)rested(0)else seen=true perchX=root.
+AbsoluteSize.X*0.5 phaseUntil=os.clock()+math.random(12,20)if self.Ready then
+play({{HAPPY,0.9,hop}})end end end function Cat:SetVisible(visible)self.Hidden=
+visible==false layer.Visible=self.Active and self.Ready and not self.Hidden end
+local pressAt,dragging Util.Drag(hit,function(pointer)pressAt,dragging=pointer,
+false end,function(pointer)if not dragging and(pointer-pressAt).Magnitude>6 then
+dragging,held,jump,perched=true,true,nil,false token=token+1 Cat.Busy,Cat.Asleep
+=false,false lastHeldX=pointer.X show(DANGLE)end if dragging then pos=pointer+
+Vector2.new(0,SIZE*0.9)end end,function()if not dragging then return Cat:Pet()
+end dragging,held,swing=false,false,0 Util.Tween(sprite,0.3,{Rotation=0},Enum.
+EasingStyle.Back)local at,size=root.AbsolutePosition,root.AbsoluteSize if pos.X>
+at.X and pos.X<at.X+size.X and math.abs(pos.Y-at.Y)<SIZE then perched,perchX=
+true,pos.X-at.X end rested(math.random(6,12))play({{STARTLED,0.35,hop},{SIT,0.3}
+})end)Library:GiveSignal(Services.RunService.RenderStepped:Connect(function(dt)
+if not Cat.Active or not Cat.Ready or Cat.Hidden then return end local now=os.
+clock()local mouse=Util.Mouse()local moved=(mouse-lastMouse).Magnitude>1 if
+moved then lastMouse,lastMove=mouse,now end if held then local lean=math.clamp(-
+(pos.X-lastHeldX)/math.max(dt,0.001)*0.04,-32,32)lastHeldX=pos.X swing=swing+(
+lean-swing)*math.min(dt*8,1)sprite.Rotation=swing place()return end if jump then
+local t=math.min((now-jump.start)/jump.time,1)local to=jump.to()if math.abs(to.X
+-jump.from.X)>2 then facing=to.X>jump.from.X and 1 or-1 end pos=jump.from:Lerp(
+to,t)-Vector2.new(0,math.sin(t*math.pi)*jump.height)show(RUN[t<0.6 and 1 or 2])
+if t>=1 then finishJump()end place()return end if perched then pos=edge(perchX)
+end place()if Cat.Asleep then show(now%3.2<1.6 and SLEEP_IN or SLEEP_OUT)if now>
+nextZ then nextZ=now+1.6 float(false,SIZE*0.3,math.random(10,14))end if moved
+and(mouse-(pos-Vector2.new(0,SIZE*0.4))).Magnitude<SIZE*1.2 then play({{STARTLED
+,0.55,hop},{BLINK,0.3}})rested(math.random(2,5))elseif now>wakeAt and now-
+lastMove<4 then play({{DROWSY,0.6},{YAWN,1},{DROWSY,0.4}})rested(math.random(3,7
+))end return end if Cat.Busy then return end if phase=='chase'then local view=
+layer.AbsoluteSize local side=pos.X<mouse.X and-1 or 1 local target=Vector2.new(
+math.clamp(mouse.X+side*SIZE*0.8,SIZE/2,view.X-SIZE/2),math.clamp(mouse.Y+SIZE*
+0.45,SIZE-inset().Y,view.Y-inset().Y))local near=(target-pos).Magnitude<(Cat.
+Moving and 3 or SIZE*0.5)Cat.Moving=not near and not step(target,dt,now)if not
+Cat.Moving then idle(now)if now-lastMove>10 or now>phaseUntil then phase,tired,
+strollTo='return',true,40+math.random()*math.max(root.AbsoluteSize.X-80,0)end
+end elseif phase=='return'then local target=edge(strollTo)if(target-pos).
+Magnitude<170 then local x=strollTo leap(function()return edge(x)end,function()
+perched,perchX,strollTo=true,x,nil phase,phaseUntil='home',os.clock()+math.
+random(14,26)if tired then sleep()end end)else step(target,dt,now)end elseif
+strollTo then local delta=strollTo-perchX if math.abs(delta)<2 then strollTo=nil
+else facing=delta>0 and 1 or-1 perchX=perchX+math.clamp(delta,-70*dt,70*dt)show(
+RUN[math.floor(now*5)%#RUN+1])end else idle(now)if now>phaseUntil and now-
+lastMove<3 then phase,phaseUntil,running='chase',now+math.random(30,50),false if
+perched then local from=pos local toward=mouse-from local landing=from+(toward.
+Magnitude>0 and toward.Unit or Vector2.yAxis)*math.min(toward.Magnitude,130)Cat.
+Busy=false leap(function()return landing end,function()perched=false end)end
+elseif now-lastMove>NAP_AFTER then sleep()elseif perched and now>nextStroll then
+nextStroll=now+math.random(6,12)strollTo=40+math.random()*math.max(root.
+AbsoluteSize.X-80,0)end end end))task.spawn(function()local sheet=Assets.Get(
+'cat/body.png')if not sheet then return end heart=Assets.Get('cat/heart.png')
+sprite.Image=sheet show(SIT)Cat.Ready=true layer.Visible=Cat.Active and not Cat.
+Hidden if Cat.Active then play({{HAPPY,0.9,hop}})end end)return Cat end end end
 function __DARKLUA_BUNDLE_MODULES.p()local v=__DARKLUA_BUNDLE_MODULES.cache.p if
 not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c
 end end do local function __modImpl()return function(Library)local Util=Library.
@@ -2187,11 +2219,11 @@ config or{}local dpi=self.DPIScale local camera=Services.Workspace.CurrentCamera
 local view=camera and camera.ViewportSize or Vector2.new(1280,720)local size=
 config.Size or UDim2.fromOffset(720,600)local showCat=config.Cat~=false local
 width=math.min(size.X.Offset,math.floor((view.X-20)/dpi))local height=math.min(
-size.Y.Offset,math.floor((view.Y-(showCat and 130 or 20))/dpi))if config.
+size.Y.Offset,math.floor((view.Y-(showCat and 90 or 20))/dpi))if config.
 NotifySide then self:SetNotifySide(config.NotifySide)end if config.ToggleKeybind
 then self.ToggleKeybind=config.ToggleKeybind end local root=New('Frame',{Name=
 'Window',AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,showCat
-and 50 or 0),Size=UDim2.fromOffset(width,height),BackgroundTransparency=1,
+and 30 or 0),Size=UDim2.fromOffset(width,height),BackgroundTransparency=1,
 Visible=false,Parent=self.Layer})local scale=New('UIScale',{Scale=dpi,Parent=
 root})for _,ring in ipairs({{4,0.86},{9,0.94}})do local glow=New('Frame',{Name=
 'Glow',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Parent=root})Util.

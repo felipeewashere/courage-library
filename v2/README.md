@@ -59,9 +59,9 @@ src/Window.lua      window, sidebar, tabs, sub tabs, search, dialog, open / clos
 src/Container.lua   groupbox, tabbox, dependency box and the Add* methods
 src/Elements/       one file per element
 src/Hud.lua         notifications, tooltip, watermark, key bind menu, toggle pill
-src/Cat.lua         the cat on the window's top edge (CreateWindow({ Cat = false }) turns it off)
+src/Cat.lua         the small cat that sits on the window, chases the pointer and naps (CreateWindow({ Cat = false }) turns it off)
 addons/             ThemeManager.lua, SaveManager.lua
-assets/             logo and cat sprite sheet (assets/cat is cut from the Higgsfield sheet by tools/slice_cat.py)
+assets/             logo and cat sprite sheet (assets/cat/body.png is cut from the Higgsfield sheets by tools/slice_cat.py)
 ```
 
 ## Before publishing
