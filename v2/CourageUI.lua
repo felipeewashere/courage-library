@@ -1645,179 +1645,186 @@ __DARKLUA_BUNDLE_MODULES.o()local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v
 then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end
 do local function __modImpl()return function(Library)local Util=Library.Util
 local New=Util.New local Services=Util.Services local Assets=Library.Assets
-local ASPECT=1.5546558704453441 local EYES={Vector2.new(0.3746,0.6093),Vector2.
-new(0.6272,0.6096)}local STATES={'awake','happy','squint','sleep','wave'}local
-NAP_AFTER=25 local WIDTH=150 Library._Cat=function(root)local Cat={State=
-'hidden',Active=false}local height=math.floor(WIDTH/ASPECT+0.5)local holder=New(
-'TextButton',{Name='Cat',AnchorPoint=Vector2.new(0.5,1),Position=UDim2.new(0.5,0
-,0,22),Size=UDim2.fromOffset(WIDTH,height),BackgroundTransparency=1,Visible=
-false,ZIndex=70,Parent=root})local body=New('Frame',{Size=UDim2.fromScale(1,1),
-BackgroundTransparency=1,Parent=holder})local frames={}for _,name in ipairs(
-STATES)do frames[name]=New('ImageLabel',{Name=name,Size=UDim2.fromScale(1,1),
-BackgroundTransparency=1,Visible=false,Parent=body})end local burst=New(
-'ImageLabel',{Name='Burst',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,
-Visible=false,ZIndex=3,Parent=body})local eyes={}for index,centre in ipairs(EYES
-)do local white=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.
-fromScale(centre.X,centre.Y),Size=UDim2.fromOffset(20,20),BackgroundColor3=
-Color3.fromRGB(250,246,255),Visible=false,ZIndex=2,Parent=body})Util.Corner(
-white,10)local iris=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2
-.fromScale(0.5,0.5),Size=UDim2.fromOffset(12,12),BackgroundColor3=Color3.
-fromRGB(140,70,235),ZIndex=3,Parent=white})Util.Corner(iris,6)local pupil=New(
-'Frame',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Size
-=UDim2.fromOffset(6,6),BackgroundColor3=Color3.fromRGB(28,14,48),ZIndex=4,Parent
-=iris})Util.Corner(pupil,3)local shine=New('Frame',{Position=UDim2.fromScale(
-0.58,0.1),Size=UDim2.fromOffset(3,3),BackgroundColor3=Color3.new(1,1,1),ZIndex=5
-,Parent=iris})Util.Corner(shine,2)eyes[index]={White=white,Iris=iris}end local
-fx={}local busyUntil=0 local lastMouse,lastMove=Vector2.zero,os.clock()local
-nextSneeze=os.clock()+math.random(40,90)local nextBlink=os.clock()+math.random(3
-,6)local nextZ=0 local function setState(state)Cat.State=state for name,image in
-pairs(frames)do image.Visible=name==(state=='sneeze'and'squint'or state)end
-burst.Visible=state=='sneeze'for _,eye in ipairs(eyes)do eye.White.Visible=state
-=='awake'end end local function float(kind,x,size)local asset=fx[kind]if not
-asset then return end local image=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,
-0.5),Position=UDim2.fromScale(x,0.12),Size=UDim2.fromOffset(size,size),
-BackgroundTransparency=1,Image=asset,ZIndex=6,Parent=holder})local tween=
-Services.TweenService:Create(image,TweenInfo.new(1.3,Enum.EasingStyle.Sine,Enum.
-EasingDirection.Out),{Position=UDim2.new(x+(math.random()-0.5)*0.25,0,0.12,-34),
-ImageTransparency=1,Rotation=math.random(-18,18)})tween.Completed:Once(function(
-)image:Destroy()end)tween:Play()end local function hop()local up=Services.
-TweenService:Create(body,TweenInfo.new(0.12,Enum.EasingStyle.Quad,Enum.
-EasingDirection.Out),{Position=UDim2.fromOffset(0,-7)})up.Completed:Once(
-function()Services.TweenService:Create(body,TweenInfo.new(0.4,Enum.EasingStyle.
-Bounce,Enum.EasingDirection.Out),{Position=UDim2.new()}):Play()end)up:Play()end
-function Cat:Pet()if self.State=='hidden'then return end lastMove=os.clock()if
-not self.Single then setState('happy')end busyUntil=os.clock()+1.5 hop()float(
-'heart',0.3,18)task.delay(0.15,function()float('heart',0.68,15)end)task.delay(
-0.3,function()float('sparkle',0.5,16)end)end function Cat:Sneeze()if self.State
-~='awake'then return end setState('sneeze')busyUntil=os.clock()+0.9 body.
-Rotation=-5 Services.TweenService:Create(body,TweenInfo.new(0.5,Enum.EasingStyle
-.Elastic,Enum.EasingDirection.Out),{Rotation=0}):Play()end local function blink(
-)for _,eye in ipairs(eyes)do local close=Services.TweenService:Create(eye.White,
-TweenInfo.new(0.07),{Size=UDim2.fromOffset(20,2)})close.Completed:Once(function(
-)Services.TweenService:Create(eye.White,TweenInfo.new(0.1),{Size=UDim2.
-fromOffset(20,20)}):Play()end)close:Play()end end function Cat:SetActive(active)
-self.Active=active if active and self.State~='hidden'and not self.Single then
-lastMove=os.clock()setState('wave')busyUntil=os.clock()+1.6 end end function Cat
-:SetVisible(visible)self.Hidden=visible==false holder.Visible=not self.Hidden
-and self.State~='hidden'end Library:GiveSignal(holder.MouseButton1Click:Connect(
-function()Cat:Pet()end))Library:GiveSignal(Services.RunService.RenderStepped:
-Connect(function()if not Cat.Active or Cat.State=='hidden'or Cat.Hidden then
-return end local now=os.clock()if Cat.Single then if now>nextZ then nextZ=now+
-2.4 float('zzz',0.72,20)end return end local mouse=Util.Mouse()local moved=(
-mouse-lastMouse).Magnitude>1 if moved then lastMouse,lastMove=mouse,now if Cat.
-State=='sleep'then local centre=holder.AbsolutePosition+holder.AbsoluteSize/2 if
-(mouse-centre).Magnitude<170 then setState('awake')hop()end end end if now<
-busyUntil then return end local state=Cat.State if state~='awake'and state~=
-'sleep'then setState('awake')state='awake'end if state=='awake'then if moved
-then for _,eye in ipairs(eyes)do local white=eye.White local delta=mouse-(white.
-AbsolutePosition+white.AbsoluteSize/2)local length=delta.Magnitude if length>0
-then delta=delta/length*math.min(length/45,1)*3 end eye.Iris.Position=UDim2.new(
-0.5,delta.X,0.5,delta.Y)end end if now-lastMove>NAP_AFTER then setState('sleep')
-nextZ=now+0.4 elseif now>nextSneeze then nextSneeze=now+math.random(40,90)Cat:
-Sneeze()elseif now>nextBlink then nextBlink=now+math.random(3,6)blink()end
-elseif now>nextZ then nextZ=now+2.4 float('zzz',0.72,20)end end))task.spawn(
-function()fx.heart=Assets.Get('cat/fx_heart.png')fx.sparkle=Assets.Get(
-'cat/fx_sparkle.png')fx.zzz=Assets.Get('cat/fx_zzz.png')local drawn=Assets.Get(
-'cat/cat_v2_sleep.png')if drawn then Cat.Single=true frames.sleep.Image=drawn
-setState('sleep')holder.Visible=not Cat.Hidden return end local awake=Assets.
-Get('cat/cat_awake.png')if not awake then return end frames.awake.Image=awake
-for _,name in ipairs(STATES)do if name~='awake'then frames[name].Image=Assets.
-Get('cat/cat_'..name..'.png')or awake end end burst.Image=Assets.Get(
-'cat/cat_burst.png')or''fx.heart=Assets.Get('cat/fx_heart.png')fx.sparkle=Assets
-.Get('cat/fx_sparkle.png')fx.zzz=Assets.Get('cat/fx_zzz.png')setState('awake')
-holder.Visible=not Cat.Hidden if Cat.Active then Cat:SetActive(true)end end)
-return Cat end end end function __DARKLUA_BUNDLE_MODULES.p()local v=
-__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}
-__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c end end do local function 
-__modImpl()return function(Library)local Util=Library.Util local New=Util.New
-local Services=Util.Services local Assets=Library.Assets local Layout={Columns={
-},Boxes={},Data={tabs={},order={},moves={}}}Library.Layout=Layout local ICONS={
-'star','heart','bolt','flame','fire','shield','target','ghost','crown','gift',
-'rocket','leaf','map-point','compass','eye','user','users-group-rounded',
-'settings','widget','folder','bookmark','flag','bell','gamepad','stars','home',
-'cat','paw','bomb','magic-stick','cup-star','medal-star'}do local seen,rest={},{
-}for _,name in ipairs(ICONS)do seen[name]=true end for name in pairs(Assets.
-Filled.Icons)do if not seen[name]then table.insert(rest,name)end end table.sort(
-rest)table.move(rest,1,#rest,#ICONS+1,ICONS)end local canFile=type(isfile)==
-'function'and type(readfile)=='function'and type(writefile)=='function'local 
-function path()return Library.LayoutFile or('CourageUI/layout_'..tostring(game.
-GameId)..'.json')end function Layout.Load()if not canFile then return end pcall(
-function()if not isfile(path())then return end local data=Services.HttpService:
-JSONDecode(readfile(path()))if type(data)=='table'then Layout.Data={tabs=data.
-tabs or{},order=data.order or{},moves=data.moves or{}}end end)end function
-Layout.Save()local window,data=Library.Window,Layout.Data data.moves={}for key,
-box in pairs(Layout.Boxes)do if box.Moved then data.moves[key]={column=box.
-Column.Key,index=table.find(box.Column.Groupboxes,box)or 1}end end local tabs={}
-for _,tab in ipairs(window.Tabs)do if not tab.IsFooter then table.insert(tabs,
-tab)end end table.sort(tabs,function(a,b)return a.Button.LayoutOrder<b.Button.
-LayoutOrder end)data.order={}for index,tab in ipairs(tabs)do data.order[index]=
-tab.Key end if not canFile then return end pcall(function()local built=''local
-parts=string.split(path(),'/')parts[#parts]=nil for _,part in ipairs(parts)do
-built=built..part if not isfolder(built)then makefolder(built)end built=built..
-'/'end writefile(path(),Services.HttpService:JSONEncode(data))end)end local 
-function renumber(column)for index,box in ipairs(column.Groupboxes)do box.Frame.
-LayoutOrder=index*2 end column.Order=#column.Groupboxes*2 if column.Owner then
-column.Owner:RefreshEmpty()end end function Layout.Move(box,column,index)local
-from=box.Column local at=table.find(from.Groupboxes,box)if at then table.remove(
-from.Groupboxes,at)end table.insert(column.Groupboxes,math.clamp(index,1,#column
-.Groupboxes+1),box)box.Column=column box.Frame.Parent=column.Frame renumber(from
-)if column~=from then renumber(column)end end function Layout.RegisterColumn(
-column)Layout.Columns[column.Key]=column end function Layout.RegisterBox(box)
-local key=box.Column.Key..'|'..box.Name while Layout.Boxes[key]do key=key..'+'
-end box.Key,box.Home=key,box.Column Layout.Boxes[key]=box Layout.Schedule()end
-function Layout.Apply()local list={}for key,move in pairs(Layout.Data.moves)do
-local box,column=Layout.Boxes[key],Layout.Columns[move.column]if box and column
-and not box.Applied then table.insert(list,{box,column,tonumber(move.index)or 1}
-)end end table.sort(list,function(a,b)return a[3]<b[3]end)for _,item in ipairs(
-list)do item[1].Applied,item[1].Moved=true,true Layout.Move(item[1],item[2],item
-[3])end local window,order=Library.Window,Layout.Data.order if window and#order>
-0 then for _,tab in ipairs(window.Tabs)do if not tab.IsFooter then local index=
-table.find(order,tab.Key)if index then tab.Button.LayoutOrder=index elseif tab.
-Button.LayoutOrder<500 then tab.Button.LayoutOrder+=500 end end end end end
-local pending=false function Layout.Schedule()if pending then return end pending
-=true task.delay(0.25,function()pending=false if not Library.Unloaded then
-Layout.Apply()end end)end function Layout.HeaderDrag(box)local start,dragging,
-ghost,marker,target,targetIndex,last,stepper local function update(pointer)local
-inset=Services.GuiService:GetGuiInset()ghost.Position=UDim2.fromOffset(pointer.X
-+inset.X,pointer.Y+inset.Y)local window=Library.Window for _,tab in ipairs(
-window.Tabs)do if tab~=window.ActiveTab and tab.Button.Visible and Util.Inside(
-tab.Button,pointer)then tab:Show()end end local tab=window.ActiveTab for _,sub
-in ipairs(tab.SubTabs)do if sub~=tab.ActiveSub and Util.Inside(sub.Button,
-pointer)then sub:Show()end end local page=(tab.ActiveSub or tab).Page local
-frame=page.Frame local column=pointer.X<frame.AbsolutePosition.X+frame.
-AbsoluteSize.X/2 and page.Left or page.Right local index,before=1,nil for _,
-other in ipairs(column.Groupboxes)do if other~=box then if other.Frame.Visible
-and pointer.Y<other.Frame.AbsolutePosition.Y+other.Frame.AbsoluteSize.Y/2 then
-before=other break end index+=1 end end target,targetIndex=column,index marker.
-LayoutOrder=before and(before.Frame.LayoutOrder-1)or 100000 marker.Parent=column
-.Frame end local function autoScroll(dt)local window=Library.Window local tab=
-window.ActiveTab for _,scroll in ipairs({window.TabList,(tab.ActiveSub or tab).
-Page.Frame})do local position,size=scroll.AbsolutePosition,scroll.AbsoluteSize
-if last.X>=position.X and last.X<=position.X+size.X then local direction=0 if
-last.Y<position.Y+46 and last.Y>position.Y-30 then direction=-1 elseif last.Y>
-position.Y+size.Y-46 and last.Y<position.Y+size.Y+30 then direction=1 end if
-direction~=0 then local limit=math.max(0,scroll.AbsoluteCanvasSize.Y-size.Y)/
-Library.DPIScale local y=math.clamp(scroll.CanvasPosition.Y+direction*dt*520,0,
-limit)if y~=scroll.CanvasPosition.Y then scroll.CanvasPosition=Vector2.new(0,y)
-update(last)end end end end end Util.Drag(box.Header,function(pointer)start,
-dragging,target=pointer,false,nil end,function(pointer)if not dragging then if(
-pointer-start).Magnitude<8 then return end dragging=true Library:ClosePopup()
-ghost=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),Size=UDim2.fromOffset(180,36
-),BackgroundColor3='Main',ZIndex=150,Parent=Library.Overlay})New('UIScale',{
-Scale=Library.DPIScale,Parent=ghost})Util.Corner(ghost,10)Util.Stroke(ghost,
-'Accent',1.5)New('TextLabel',{Size=UDim2.new(1,-20,1,0),Position=UDim2.
-fromOffset(10,0),BackgroundTransparency=1,Text=box.Name,FontFace='FontBold',
-TextSize=13,TextTruncate=Enum.TextTruncate.AtEnd,ZIndex=151,Parent=ghost})marker
-=New('Frame',{Name='DropMarker',Size=UDim2.new(1,0,0,3),BackgroundColor3=
-'Accent'})Util.Corner(marker,2)box.Frame.BackgroundTransparency=0.6 stepper=
-Services.RunService.RenderStepped:Connect(autoScroll)end last=pointer update(
-pointer)end,function()if not dragging then return box:ToggleCollapsed()end if
-stepper then stepper:Disconnect()end Util.Destroy(ghost)Util.Destroy(marker)box.
-Frame.BackgroundTransparency=0 if not target then return end local from=box.
-Column Layout.Move(box,target,targetIndex)for _,column in ipairs({from,target})
-do for _,other in ipairs(column.Groupboxes)do if other.Key then other.Moved,
-other.Applied=true,true end end end Layout.Save()end)end function Layout.TabDrag
-(tab)local start,dragging Util.Drag(tab.Button,function(pointer)start,dragging=
+local CELL=256 local EYES={Vector2.new(0.3337,0.6982),Vector2.new(0.6633,0.6982)
+}local IRIS=0.118 local REACH=0.034 local OPEN,HALF,SHUT,HAPPY,WAVE_A,WAVE_B,
+LOVE=1,3,4,5,6,7,8 local SNIFF,SNEEZE,STARTLED,YAWN,SLEEP_IN,SLEEP_OUT,GRUMPY,
+LICK=9,10,11,12,13,14,15,16 local WIDTH=140 local PAWS=12 local NAP_AFTER=25
+Library._Cat=function(root)local Cat={Active=false,Ready=false,Asleep=false,Busy
+=false}local holder=New('TextButton',{Name='Cat',Text='',AutoButtonColor=false,
+AnchorPoint=Vector2.new(0.5,1),Position=UDim2.new(0.5,0,0,PAWS),Size=UDim2.
+fromOffset(WIDTH,WIDTH+10),BackgroundTransparency=1,ClipsDescendants=true,
+Visible=false,ZIndex=70,Parent=root})local sprite=New('ImageLabel',{AnchorPoint=
+Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(1,WIDTH/
+(WIDTH+10)),BackgroundTransparency=1,ImageRectSize=Vector2.new(CELL,CELL),ZIndex
+=70,Parent=holder})local baseSize=sprite.Size local irises={}for index,centre in
+ipairs(EYES)do irises[index]=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.fromScale(centre.X,centre.Y),Size=UDim2.fromScale(IRIS,IRIS),
+BackgroundTransparency=1,ZIndex=71,Parent=sprite})end local heart local look=
+Vector2.zero local token,streak,lastPet=0,0,0 local lastMouse,lastMove=Vector2.
+zero,os.clock()local nextBlink=os.clock()+3 local nextSneeze=os.clock()+math.
+random(45,100)local nextLick=os.clock()+math.random(30,70)local nextRoam=os.
+clock()+math.random(50,110)local nextZ=0 local dragging=false local function 
+show(pose)Cat.Pose=pose sprite.ImageRectOffset=Vector2.new((pose-1)%4*CELL,math.
+floor((pose-1)/4)*CELL)for _,iris in ipairs(irises)do iris.Visible=pose==OPEN
+end end local function play(steps,done)token=token+1 local mine=token Cat.Busy,
+Cat.Asleep=true,false task.spawn(function()for _,step in ipairs(steps)do show(
+step[1])if step[3]then step[3]()end task.wait(step[2])if token~=mine then return
+end end Cat.Busy=false lastMove=os.clock()if done then done()else show(OPEN)end
+end)end local function slide(offset,seconds,style)Util.Tween(sprite,seconds,{
+Position=UDim2.new(0.5,0,1,offset)},style)end local function hop()slide(-8,0.12,
+Enum.EasingStyle.Quad)task.delay(0.12,function()slide(0,0.4,Enum.EasingStyle.
+Bounce)end)end local function tilt(angle)Util.Tween(sprite,0.18,{Rotation=angle}
+,Enum.EasingStyle.Back)end local function float(isHeart,side,size)local at=
+holder.Position local props={AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.
+new(at.X.Scale,side,0,-WIDTH*0.55),Size=UDim2.fromOffset(size,size),
+BackgroundTransparency=1,ZIndex=72,Parent=root}local item,goal if isHeart then
+if not heart then return end props.Image,props.ScaleType=heart,Enum.ScaleType.
+Fit item,goal=New('ImageLabel',props),{ImageTransparency=1}else props.Text,props
+.Font,props.TextSize,props.TextColor3='z',Enum.Font.GothamBold,size,Color3.
+fromRGB(206,170,255)item,goal=New('TextLabel',props),{TextTransparency=1}end
+goal.Position=UDim2.new(at.X.Scale,side+math.random(-14,14),0,-WIDTH*0.55-42)
+goal.Rotation=math.random(-18,18)local tween=Services.TweenService:Create(item,
+TweenInfo.new(1.4,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),goal)tween.
+Completed:Once(function()item:Destroy()end)tween:Play()end local function hearts
+(count)for index=1,count do task.delay((index-1)*0.14,function()float(true,math.
+random(-40,40),math.random(14,20))end)end end local function sleep()play({{HALF,
+0.6},{YAWN,1.1},{HALF,0.6},{SHUT,0.4}},function()Cat.Asleep=true nextZ=os.clock(
+)+0.5 end)end function Cat:Pet()if not self.Ready then return end local now=os.
+clock()if self.Asleep then play({{STARTLED,0.45,hop},{GRUMPY,1.4}})return end
+streak=now-lastPet<1.6 and streak+1 or 1 lastPet=now if streak>=3 then streak=0
+play({{LOVE,1.9,function()hop()hearts(5)end}})else play({{HAPPY,1.1,function()
+hop()hearts(2)end}})end end function Cat:Sneeze()if not self.Ready then return
+end play({{SNIFF,0.55,function()tilt(-5)end},{SNEEZE,0.34,function()tilt(7)
+slide(5,0.08)end},{SNIFF,0.2,function()tilt(0)slide(0,0.2)end},{HALF,0.25}})end
+function Cat:Wave()if not self.Ready then return end play({{WAVE_A,0.17},{WAVE_B
+,0.17},{WAVE_A,0.17},{WAVE_B,0.17},{WAVE_A,0.17},{HAPPY,0.4}})end function Cat:
+Roam()if not self.Ready then return end local target=0.15+math.random()*0.7
+play({{STARTLED,0.25},{OPEN,0.45,function()slide(WIDTH,0.4,Enum.EasingStyle.Quad
+)end},{OPEN,0.05,function()holder.Position=UDim2.new(target,0,0,PAWS)end},{HAPPY
+,0.8,function()slide(0,0.45,Enum.EasingStyle.Back)end}})end function Cat:
+SetActive(active)self.Active=active if active then self:Wave()end end function
+Cat:SetVisible(visible)self.Hidden=visible==false holder.Visible=not self.Hidden
+and self.Ready end local pressAt,pressScale Util.Drag(holder,function(pointer)
+pressAt,pressScale,dragging=pointer,holder.Position.X.Scale,false end,function(
+pointer)local delta=pointer.X-pressAt.X if not dragging and math.abs(delta)>6
+then dragging=true play({{STARTLED,600}})end if dragging then holder.Position=
+UDim2.new(math.clamp(pressScale+delta/root.AbsoluteSize.X,0.1,0.9),0,0,PAWS)end
+end,function()if dragging then dragging=false play({{HAPPY,0.6,hop}})else Cat:
+Pet()end end)Library:GiveSignal(Services.RunService.RenderStepped:Connect(
+function(dt)if not Cat.Active or not Cat.Ready or Cat.Hidden then return end
+local now=os.clock()local mouse=Util.Mouse()local moved=(mouse-lastMouse).
+Magnitude>1 if moved then lastMouse,lastMove=mouse,now end if Cat.Asleep then
+show(now%3.2<1.6 and SLEEP_IN or SLEEP_OUT)if now>nextZ then nextZ=now+1.6
+float(false,34,math.random(13,19))end if moved and(mouse-(holder.
+AbsolutePosition+holder.AbsoluteSize/2)).Magnitude<200 then play({{STARTLED,0.55
+,hop}})end return end if Cat.Busy then return end sprite.Size=baseSize+UDim2.
+fromOffset(0,math.sin(now*2.2)*1.4)local centre=sprite.AbsolutePosition+sprite.
+AbsoluteSize*Vector2.new(0.5,EYES[1].Y)local delta=mouse-centre local length=
+delta.Magnitude local goal=length>0 and delta/length*math.min(length/90,1)*REACH
+or Vector2.zero look=look:Lerp(goal,1-math.exp(-dt*14))for index,iris in ipairs(
+irises)do iris.Position=UDim2.fromScale(EYES[index].X+look.X,EYES[index].Y+look.
+Y)end if now-lastMove>NAP_AFTER then sleep()elseif now>nextSneeze then
+nextSneeze=now+math.random(45,100)Cat:Sneeze()elseif now>nextLick then nextLick=
+now+math.random(30,70)play({{LICK,0.32},{SHUT,0.14},{LICK,0.32},{SHUT,0.14},{
+LICK,0.32}})elseif now>nextRoam then nextRoam=now+math.random(50,110)Cat:Roam()
+elseif now>nextBlink then nextBlink=now+2+math.random()*4 play({{HALF,0.05},{
+SHUT,0.09},{HALF,0.05}})end end))task.spawn(function()local sheet=Assets.Get(
+'cat/sheet.png')local iris=Assets.Get('cat/iris.png')if not sheet or not iris
+then return end heart=Assets.Get('cat/heart.png')sprite.Image=sheet for _,image
+in ipairs(irises)do image.Image=iris end show(OPEN)Cat.Ready=true holder.Visible
+=not Cat.Hidden if Cat.Active then Cat:Wave()end end)return Cat end end end
+function __DARKLUA_BUNDLE_MODULES.p()local v=__DARKLUA_BUNDLE_MODULES.cache.p if
+not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c
+end end do local function __modImpl()return function(Library)local Util=Library.
+Util local New=Util.New local Services=Util.Services local Assets=Library.Assets
+local Layout={Columns={},Boxes={},Data={tabs={},order={},moves={}}}Library.
+Layout=Layout local ICONS={'star','heart','bolt','flame','fire','shield',
+'target','ghost','crown','gift','rocket','leaf','map-point','compass','eye',
+'user','users-group-rounded','settings','widget','folder','bookmark','flag',
+'bell','gamepad','stars','home','cat','paw','bomb','magic-stick','cup-star',
+'medal-star'}do local seen,rest={},{}for _,name in ipairs(ICONS)do seen[name]=
+true end for name in pairs(Assets.Filled.Icons)do if not seen[name]then table.
+insert(rest,name)end end table.sort(rest)table.move(rest,1,#rest,#ICONS+1,ICONS)
+end local canFile=type(isfile)=='function'and type(readfile)=='function'and
+type(writefile)=='function'local function path()return Library.LayoutFile or(
+'CourageUI/layout_'..tostring(game.GameId)..'.json')end function Layout.Load()if
+not canFile then return end pcall(function()if not isfile(path())then return end
+local data=Services.HttpService:JSONDecode(readfile(path()))if type(data)==
+'table'then Layout.Data={tabs=data.tabs or{},order=data.order or{},moves=data.
+moves or{}}end end)end function Layout.Save()local window,data=Library.Window,
+Layout.Data data.moves={}for key,box in pairs(Layout.Boxes)do if box.Moved then
+data.moves[key]={column=box.Column.Key,index=table.find(box.Column.Groupboxes,
+box)or 1}end end local tabs={}for _,tab in ipairs(window.Tabs)do if not tab.
+IsFooter then table.insert(tabs,tab)end end table.sort(tabs,function(a,b)return
+a.Button.LayoutOrder<b.Button.LayoutOrder end)data.order={}for index,tab in
+ipairs(tabs)do data.order[index]=tab.Key end if not canFile then return end
+pcall(function()local built=''local parts=string.split(path(),'/')parts[#parts]=
+nil for _,part in ipairs(parts)do built=built..part if not isfolder(built)then
+makefolder(built)end built=built..'/'end writefile(path(),Services.HttpService:
+JSONEncode(data))end)end local function renumber(column)for index,box in ipairs(
+column.Groupboxes)do box.Frame.LayoutOrder=index*2 end column.Order=#column.
+Groupboxes*2 if column.Owner then column.Owner:RefreshEmpty()end end function
+Layout.Move(box,column,index)local from=box.Column local at=table.find(from.
+Groupboxes,box)if at then table.remove(from.Groupboxes,at)end table.insert(
+column.Groupboxes,math.clamp(index,1,#column.Groupboxes+1),box)box.Column=column
+box.Frame.Parent=column.Frame renumber(from)if column~=from then renumber(column
+)end end function Layout.RegisterColumn(column)Layout.Columns[column.Key]=column
+end function Layout.RegisterBox(box)local key=box.Column.Key..'|'..box.Name
+while Layout.Boxes[key]do key=key..'+'end box.Key,box.Home=key,box.Column Layout
+.Boxes[key]=box Layout.Schedule()end function Layout.Apply()local list={}for key
+,move in pairs(Layout.Data.moves)do local box,column=Layout.Boxes[key],Layout.
+Columns[move.column]if box and column and not box.Applied then table.insert(list
+,{box,column,tonumber(move.index)or 1})end end table.sort(list,function(a,b)
+return a[3]<b[3]end)for _,item in ipairs(list)do item[1].Applied,item[1].Moved=
+true,true Layout.Move(item[1],item[2],item[3])end local window,order=Library.
+Window,Layout.Data.order if window and#order>0 then for _,tab in ipairs(window.
+Tabs)do if not tab.IsFooter then local index=table.find(order,tab.Key)if index
+then tab.Button.LayoutOrder=index elseif tab.Button.LayoutOrder<500 then tab.
+Button.LayoutOrder+=500 end end end end end local pending=false function Layout.
+Schedule()if pending then return end pending=true task.delay(0.25,function()
+pending=false if not Library.Unloaded then Layout.Apply()end end)end function
+Layout.HeaderDrag(box)local start,dragging,ghost,marker,target,targetIndex,last,
+stepper local function update(pointer)local inset=Services.GuiService:
+GetGuiInset()ghost.Position=UDim2.fromOffset(pointer.X+inset.X,pointer.Y+inset.Y
+)local window=Library.Window for _,tab in ipairs(window.Tabs)do if tab~=window.
+ActiveTab and tab.Button.Visible and Util.Inside(tab.Button,pointer)then tab:
+Show()end end local tab=window.ActiveTab for _,sub in ipairs(tab.SubTabs)do if
+sub~=tab.ActiveSub and Util.Inside(sub.Button,pointer)then sub:Show()end end
+local page=(tab.ActiveSub or tab).Page local frame=page.Frame local column=
+pointer.X<frame.AbsolutePosition.X+frame.AbsoluteSize.X/2 and page.Left or page.
+Right local index,before=1,nil for _,other in ipairs(column.Groupboxes)do if
+other~=box then if other.Frame.Visible and pointer.Y<other.Frame.
+AbsolutePosition.Y+other.Frame.AbsoluteSize.Y/2 then before=other break end
+index+=1 end end target,targetIndex=column,index marker.LayoutOrder=before and(
+before.Frame.LayoutOrder-1)or 100000 marker.Parent=column.Frame end local 
+function autoScroll(dt)local window=Library.Window local tab=window.ActiveTab
+for _,scroll in ipairs({window.TabList,(tab.ActiveSub or tab).Page.Frame})do
+local position,size=scroll.AbsolutePosition,scroll.AbsoluteSize if last.X>=
+position.X and last.X<=position.X+size.X then local direction=0 if last.Y<
+position.Y+46 and last.Y>position.Y-30 then direction=-1 elseif last.Y>position.
+Y+size.Y-46 and last.Y<position.Y+size.Y+30 then direction=1 end if direction~=0
+then local limit=math.max(0,scroll.AbsoluteCanvasSize.Y-size.Y)/Library.DPIScale
+local y=math.clamp(scroll.CanvasPosition.Y+direction*dt*520,0,limit)if y~=scroll
+.CanvasPosition.Y then scroll.CanvasPosition=Vector2.new(0,y)update(last)end end
+end end end Util.Drag(box.Header,function(pointer)start,dragging,target=pointer,
+false,nil end,function(pointer)if not dragging then if(pointer-start).Magnitude<
+8 then return end dragging=true Library:ClosePopup()ghost=New('Frame',{
+AnchorPoint=Vector2.new(0.5,0.5),Size=UDim2.fromOffset(180,36),BackgroundColor3=
+'Main',ZIndex=150,Parent=Library.Overlay})New('UIScale',{Scale=Library.DPIScale,
+Parent=ghost})Util.Corner(ghost,10)Util.Stroke(ghost,'Accent',1.5)New(
+'TextLabel',{Size=UDim2.new(1,-20,1,0),Position=UDim2.fromOffset(10,0),
+BackgroundTransparency=1,Text=box.Name,FontFace='FontBold',TextSize=13,
+TextTruncate=Enum.TextTruncate.AtEnd,ZIndex=151,Parent=ghost})marker=New('Frame'
+,{Name='DropMarker',Size=UDim2.new(1,0,0,3),BackgroundColor3='Accent'})Util.
+Corner(marker,2)box.Frame.BackgroundTransparency=0.6 stepper=Services.RunService
+.RenderStepped:Connect(autoScroll)end last=pointer update(pointer)end,function()
+if not dragging then return box:ToggleCollapsed()end if stepper then stepper:
+Disconnect()end Util.Destroy(ghost)Util.Destroy(marker)box.Frame.
+BackgroundTransparency=0 if not target then return end local from=box.Column
+Layout.Move(box,target,targetIndex)for _,column in ipairs({from,target})do for _
+,other in ipairs(column.Groupboxes)do if other.Key then other.Moved,other.
+Applied=true,true end end end Layout.Save()end)end function Layout.TabDrag(tab)
+local start,dragging Util.Drag(tab.Button,function(pointer)start,dragging=
 pointer,false end,function(pointer)if not dragging then if math.abs(pointer.Y-
 start.Y)<8 then return end dragging=true end local tabs={}for _,other in ipairs(
 tab.Window.Tabs)do if other~=tab and not other.IsFooter then table.insert(tabs,
@@ -2178,22 +2185,22 @@ function()for _,bar in ipairs(bars)do Util.TweenTheme(bar,0.15,{BackgroundColor3
 ='Dim'})end end)return button end function Library:CreateWindow(config)config=
 config or{}local dpi=self.DPIScale local camera=Services.Workspace.CurrentCamera
 local view=camera and camera.ViewportSize or Vector2.new(1280,720)local size=
-config.Size or UDim2.fromOffset(720,600)local showCat=false local width=math.
-min(size.X.Offset,math.floor((view.X-20)/dpi))local height=math.min(size.Y.
-Offset,math.floor((view.Y-(showCat and 70 or 20))/dpi))if config.NotifySide then
-self:SetNotifySide(config.NotifySide)end if config.ToggleKeybind then self.
-ToggleKeybind=config.ToggleKeybind end local root=New('Frame',{Name='Window',
-AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,showCat and 14 or
-0),Size=UDim2.fromOffset(width,height),BackgroundTransparency=1,Visible=false,
-Parent=self.Layer})local scale=New('UIScale',{Scale=dpi,Parent=root})for _,ring
-in ipairs({{4,0.86},{9,0.94}})do local glow=New('Frame',{Name='Glow',Size=UDim2.
-fromScale(1,1),BackgroundTransparency=1,Parent=root})Util.Corner(glow,16)Util.
-Stroke(glow,'Accent',ring[1],ring[2])end local main=New('Frame',{Name='Main',
-Size=UDim2.fromScale(1,1),BackgroundColor3='Background',Parent=root})Util.
-Corner(main,16)local border=New('UIStroke',{Color=Color3.new(1,1,1),Thickness=
-1.5,ApplyStrokeMode=Enum.ApplyStrokeMode.Border,Parent=main})local light=New(
-'UIGradient',{Parent=border})Util.Register(light,{Color=function(theme)return
-ColorSequence.new({ColorSequenceKeypoint.new(0,theme.Outline),
+config.Size or UDim2.fromOffset(720,600)local showCat=config.Cat~=false local
+width=math.min(size.X.Offset,math.floor((view.X-20)/dpi))local height=math.min(
+size.Y.Offset,math.floor((view.Y-(showCat and 130 or 20))/dpi))if config.
+NotifySide then self:SetNotifySide(config.NotifySide)end if config.ToggleKeybind
+then self.ToggleKeybind=config.ToggleKeybind end local root=New('Frame',{Name=
+'Window',AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,showCat
+and 50 or 0),Size=UDim2.fromOffset(width,height),BackgroundTransparency=1,
+Visible=false,Parent=self.Layer})local scale=New('UIScale',{Scale=dpi,Parent=
+root})for _,ring in ipairs({{4,0.86},{9,0.94}})do local glow=New('Frame',{Name=
+'Glow',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Parent=root})Util.
+Corner(glow,16)Util.Stroke(glow,'Accent',ring[1],ring[2])end local main=New(
+'Frame',{Name='Main',Size=UDim2.fromScale(1,1),BackgroundColor3='Background',
+Parent=root})Util.Corner(main,16)local border=New('UIStroke',{Color=Color3.new(1
+,1,1),Thickness=1.5,ApplyStrokeMode=Enum.ApplyStrokeMode.Border,Parent=main})
+local light=New('UIGradient',{Parent=border})Util.Register(light,{Color=function
+(theme)return ColorSequence.new({ColorSequenceKeypoint.new(0,theme.Outline),
 ColorSequenceKeypoint.new(0.42,theme.Outline),ColorSequenceKeypoint.new(0.5,
 theme.Accent:Lerp(Color3.new(1,1,1),0.35)),ColorSequenceKeypoint.new(0.58,theme.
 Outline),ColorSequenceKeypoint.new(1,theme.Outline)})end})Services.TweenService:
@@ -2306,8 +2313,9 @@ BackgroundTransparency=1,ZIndex=5,Parent=main})local startPointer,startSize Util
 .Drag(grip,function(pointer)startPointer,startSize=pointer,root.Size end,
 function(pointer)local delta=(pointer-startPointer)/dpi root.Size=UDim2.
 fromOffset(math.max(480,startSize.X.Offset+delta.X*2),math.max(360,startSize.Y.
-Offset+delta.Y*2))end)end self.Toggled=false if config.AutoShow~=false then self
-:Toggle(true)end return window end end end function __DARKLUA_BUNDLE_MODULES.s()
+Offset+delta.Y*2))end)end if showCat and self.Cat==nil and self._Cat then self.
+Cat=self._Cat(root)end self.Toggled=false if config.AutoShow~=false then self:
+Toggle(true)end return window end end end function __DARKLUA_BUNDLE_MODULES.s()
 local v=__DARKLUA_BUNDLE_MODULES.cache.s if not v then v={c=__modImpl()}
 __DARKLUA_BUNDLE_MODULES.cache.s=v end return v.c end end do local function 
 __modImpl()local HttpService=game:GetService('HttpService')local ThemeManager={
