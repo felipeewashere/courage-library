@@ -1188,48 +1188,49 @@ __DARKLUA_BUNDLE_MODULES.cache.j=v end return v.c end end do local function
 __modImpl()return function(Library,Base)local Util=Library.Util local New=Util.
 New local Services=Util.Services local ITEM=28 local Dropdown=Base.extend()local 
 function toSet(list)local set={}if type(list)=='table'then for key,value in
-pairs(list)do if type(key)=='number'then set[value]=true elseif value then set[
-key]=true end end elseif list~=nil then set[list]=true end return set end local 
-function sameSet(a,b)for key in pairs(a)do if not b[key]then return false end
-end for key in pairs(b)do if not a[key]then return false end end return true end
-function Dropdown:Format(value)if self.Info.FormatDisplayValue then local ok,
-text=pcall(self.Info.FormatDisplayValue,value)if ok and text~=nil then return
-tostring(text)end end return Library.Translate(tostring(value))end function
-Dropdown:Summary()if self.Multi then local list={}for _,value in ipairs(self.
-Values)do if self.Value[value]then list[#list+1]=self:Format(value)end end if#
-list==0 then return nil end return table.concat(list,', ')end if self.Value==nil
-then return nil end return self:Format(self.Value)end function Dropdown:Display(
-)local summary=self:Summary()self.Current.Text=summary or'None'Util.Register(
-self.Current,{TextColor3=summary and'Text'or'Dim'})self.Box.
-BackgroundTransparency=self.Disabled and 0.6 or 0 if self.Popup then self:
-RenderList()end end function Dropdown:GetActiveValues()if self.Multi then local
-count=0 for _ in pairs(self.Value)do count+=1 end return count end return self.
-Value~=nil and 1 or 0 end function Dropdown:SetValue(value)if self.Multi then
-local set=toSet(value)if sameSet(self.Value,set)then return end self.Value=set
-else if type(value)=='number'and self.Values[value]~=nil and not table.find(self
-.Values,value)then value=self.Values[value]end if self.Value==value then return
-end self.Value=value end self:Display()self:Commit()end function Dropdown:
-SetValues(values)self.Values=values or{}local present=toSet(self.Values)if self.
-Multi then local kept={}for key in pairs(self.Value)do if present[key]then kept[
-key]=true end end if not sameSet(kept,self.Value)then self:SetValue(kept)return
-end elseif self.Value~=nil and not present[self.Value]then self:SetValue(nil)
-return end self:Display()end function Dropdown:AddValues(values)local merged=
-table.clone(self.Values)for _,value in ipairs(type(values)=='table'and values or
-{values})do table.insert(merged,value)end self:SetValues(merged)end function
-Dropdown:SetDisabledValues(values)self.DisabledValues=toSet(values)if self.Popup
-then self:RenderList()end end function Dropdown:IsSelected(value)if self.Multi
-then return self.Value[value]==true end return self.Value==value end function
-Dropdown:Pick(value)if self.Multi then local set=table.clone(self.Value)set[
-value]=(not set[value])or nil self:SetValue(set)else if self.Value==value then
-if self.AllowNull then self:SetValue(nil)end else self:SetValue(value)end self:
-CloseList()end end function Dropdown:RenderList()local popup=self.Popup if not
-popup then return end local list=popup.List for _,child in ipairs(list:
-GetChildren())do if child:IsA('TextButton')then Util.Destroy(child)end end local
-filter=popup.Filter and string.lower(popup.Filter)or''for index,value in ipairs(
-self.Values)do local text=self:Format(value)if filter==''or string.find(string.
-lower(text),filter,1,true)then local selected=self:IsSelected(value)local
-disabled=self.DisabledValues[value]==true local row=New('TextButton',{Size=UDim2
-.new(1,0,0,ITEM-2),BackgroundColor3=selected and'AccentSoft'or'Raised',
+pairs(list)do if type(key)=='number'then if type(value)=='string'then set[value]
+=true end elseif type(key)=='string'and value then set[key]=true end end elseif
+type(list)=='string'then set[list]=true end return set end local function 
+sameSet(a,b)for key in pairs(a)do if not b[key]then return false end end for key
+in pairs(b)do if not a[key]then return false end end return true end function
+Dropdown:Format(value)if self.Info.FormatDisplayValue then local ok,text=pcall(
+self.Info.FormatDisplayValue,value)if ok and text~=nil then return tostring(text
+)end end return Library.Translate(tostring(value))end function Dropdown:Summary(
+)if self.Multi then local list={}for _,value in ipairs(self.Values)do if self.
+Value[value]then list[#list+1]=self:Format(value)end end if#list==0 then return
+nil end return table.concat(list,', ')end if self.Value==nil then return nil end
+return self:Format(self.Value)end function Dropdown:Display()local summary=self:
+Summary()self.Current.Text=summary or'None'Util.Register(self.Current,{
+TextColor3=summary and'Text'or'Dim'})self.Box.BackgroundTransparency=self.
+Disabled and 0.6 or 0 if self.Popup then self:RenderList()end end function
+Dropdown:GetActiveValues()if self.Multi then local count=0 for _ in pairs(self.
+Value)do count+=1 end return count end return self.Value~=nil and 1 or 0 end
+function Dropdown:SetValue(value)if self.Multi then local set=toSet(value)if
+sameSet(self.Value,set)then return end self.Value=set else if type(value)==
+'number'and self.Values[value]~=nil and not table.find(self.Values,value)then
+value=self.Values[value]end if self.Value==value then return end self.Value=
+value end self:Display()self:Commit()end function Dropdown:SetValues(values)self
+.Values=values or{}local present=toSet(self.Values)if self.Multi then local kept
+={}for key in pairs(self.Value)do if present[key]then kept[key]=true end end if
+not sameSet(kept,self.Value)then self:SetValue(kept)return end elseif self.Value
+~=nil and not present[self.Value]then self:SetValue(nil)return end self:Display(
+)end function Dropdown:AddValues(values)local merged=table.clone(self.Values)for
+_,value in ipairs(type(values)=='table'and values or{values})do table.insert(
+merged,value)end self:SetValues(merged)end function Dropdown:SetDisabledValues(
+values)self.DisabledValues=toSet(values)if self.Popup then self:RenderList()end
+end function Dropdown:IsSelected(value)if self.Multi then return self.Value[
+value]==true end return self.Value==value end function Dropdown:Pick(value)if
+self.Multi then local set=table.clone(self.Value)set[value]=(not set[value])or
+nil self:SetValue(set)else if self.Value==value then if self.AllowNull then self
+:SetValue(nil)end else self:SetValue(value)end self:CloseList()end end function
+Dropdown:RenderList()local popup=self.Popup if not popup then return end local
+list=popup.List for _,child in ipairs(list:GetChildren())do if child:IsA(
+'TextButton')then Util.Destroy(child)end end local filter=popup.Filter and
+string.lower(popup.Filter)or''for index,value in ipairs(self.Values)do local
+text=self:Format(value)if filter==''or string.find(string.lower(text),filter,1,
+true)then local selected=self:IsSelected(value)local disabled=self.
+DisabledValues[value]==true local row=New('TextButton',{Size=UDim2.new(1,0,0,
+ITEM-2),BackgroundColor3=selected and'AccentSoft'or'Raised',
 BackgroundTransparency=selected and 0 or 1,LayoutOrder=index,Parent=list})Util.
 Corner(row,6)local indent=10 if self.SpecialType=='Player'then local player=
 Services.Players:FindFirstChild(tostring(value))local face=New('ImageLabel',{
