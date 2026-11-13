@@ -1122,37 +1122,37 @@ self:Row(0)holder.AutomaticSize=Enum.AutomaticSize.Y New('UIPadding',{PaddingTop
 UDim2.fromOffset(12,-8)self.Label=New('TextLabel',{Name='Title',Position=UDim2.
 fromOffset(14,0),Size=UDim2.new(1,-28,0,0),AutomaticSize=Enum.AutomaticSize.Y,
 BackgroundTransparency=1,Text=self.Text,TextWrapped=true,RichText=true,
-TextXAlignment=Enum.TextXAlignment.Left,TextColor3='Dim',TextSize=13,Parent=
-holder})else local holder=self:Row(30)self:Title(holder,0)self.Label.RichText=
-true end self:Register()return self end local Divider=Base.extend()local 
-function divider(container)local self=Base.init(Divider,container,'Divider',nil,
-{})local holder=self:Row(11)holder.Line.Visible=false local line=New('Frame',{
-AnchorPoint=Vector2.new(0,0.5),Position=UDim2.new(0,12,0.5,0),Size=UDim2.new(1,-
-24,0,1),BackgroundColor3='Accent',Parent=holder})New('UIGradient',{Transparency=
-NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(
-0.5,0.2),NumberSequenceKeypoint.new(1,1)}),Parent=line})return self end return
-label,divider end end function __DARKLUA_BUNDLE_MODULES.i()local v=
-__DARKLUA_BUNDLE_MODULES.cache.i if not v then v={c=__modImpl()}
-__DARKLUA_BUNDLE_MODULES.cache.i=v end return v.c end end do local function 
-__modImpl()return function(Library,Base)local Util=Library.Util local New=Util.
-New local Slider=Base.extend()local function round(value,places)local scale=10^(
-places or 0)return math.floor(value*scale+0.5)/scale end function Slider:Format(
-value)local text=self.Rounding>0 and string.format('%.'..self.Rounding..'f',
-value)or tostring(math.floor(value+0.5))return self.Prefix..text..self.Suffix
-end function Slider:Display(instant)local alpha=math.clamp((self.Value-self.Min)
-/math.max(self.Max-self.Min,1e-9),0,1)local time=instant and 0 or 0.1 Util.
-Tween(self.Fill,time,{Size=UDim2.new(alpha,0,1,0)})Util.Tween(self.Knob,time,{
-Position=UDim2.new(alpha,0,0.5,0)})self.Box.Text=self:Format(self.Value)self.Hit
-.Active=not self.Disabled self.Track.BackgroundTransparency=self.Disabled and
-0.6 or 0 end function Slider:SetValue(value)value=tonumber(value)if not value
-then return end value=round(math.clamp(value,self.Min,self.Max),self.Rounding)if
-self.Value==value then self.Box.Text=self:Format(value)return end self.Value=
-value self:Display()self:Commit()end function Slider:SetMin(value)self.Min=value
-self:SetValue(math.max(self.Value,value))self:Display(true)end function Slider:
-SetMax(value)self.Max=value self:SetValue(math.min(self.Value,value))self:
-Display(true)end function Slider:SetPrefix(text)self.Prefix=text or''self:
-Display(true)end function Slider:SetSuffix(text)self.Suffix=text or''self:
-Display(true)end return function(container,idx,info)info=info or{}local self=
+TextXAlignment=Enum.TextXAlignment.Left,TextColor3=self.Risky and'Red'or'Dim',
+TextSize=13,Parent=holder})else local holder=self:Row(30)self:Title(holder,0)
+self.Label.RichText=true end self:Register()return self end local Divider=Base.
+extend()local function divider(container)local self=Base.init(Divider,container,
+'Divider',nil,{})local holder=self:Row(11)holder.Line.Visible=false local line=
+New('Frame',{AnchorPoint=Vector2.new(0,0.5),Position=UDim2.new(0,12,0.5,0),Size=
+UDim2.new(1,-24,0,1),BackgroundColor3='Accent',Parent=holder})New('UIGradient',{
+Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),
+NumberSequenceKeypoint.new(0.5,0.2),NumberSequenceKeypoint.new(1,1)}),Parent=
+line})return self end return label,divider end end function
+__DARKLUA_BUNDLE_MODULES.i()local v=__DARKLUA_BUNDLE_MODULES.cache.i if not v
+then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.i=v end return v.c end end
+do local function __modImpl()return function(Library,Base)local Util=Library.
+Util local New=Util.New local Slider=Base.extend()local function round(value,
+places)local scale=10^(places or 0)return math.floor(value*scale+0.5)/scale end
+function Slider:Format(value)local text=self.Rounding>0 and string.format('%.'..
+self.Rounding..'f',value)or tostring(math.floor(value+0.5))return self.Prefix..
+text..self.Suffix end function Slider:Display(instant)local alpha=math.clamp((
+self.Value-self.Min)/math.max(self.Max-self.Min,1e-9),0,1)local time=instant and
+0 or 0.1 Util.Tween(self.Fill,time,{Size=UDim2.new(alpha,0,1,0)})Util.Tween(self
+.Knob,time,{Position=UDim2.new(alpha,0,0.5,0)})self.Box.Text=self:Format(self.
+Value)self.Hit.Active=not self.Disabled self.Track.BackgroundTransparency=self.
+Disabled and 0.6 or 0 end function Slider:SetValue(value)value=tonumber(value)if
+not value then return end value=round(math.clamp(value,self.Min,self.Max),self.
+Rounding)if self.Value==value then self.Box.Text=self:Format(value)return end
+self.Value=value self:Display()self:Commit()end function Slider:SetMin(value)
+self.Min=value self:SetValue(math.max(self.Value,value))self:Display(true)end
+function Slider:SetMax(value)self.Max=value self:SetValue(math.min(self.Value,
+value))self:Display(true)end function Slider:SetPrefix(text)self.Prefix=text or
+''self:Display(true)end function Slider:SetSuffix(text)self.Suffix=text or''self
+:Display(true)end return function(container,idx,info)info=info or{}local self=
 Base.init(Slider,container,'Slider',idx,info)self.Min=tonumber(info.Min)or 0
 self.Max=tonumber(info.Max)or 100 self.Rounding=tonumber(info.Rounding)or 0 self
 .Prefix=info.Prefix or''self.Suffix=info.Suffix or''self.Value=round(math.clamp(
@@ -1597,14 +1597,14 @@ BackgroundTransparency=1,LayoutOrder=-1,Parent=self.Content})self.Image=New(
 ScaleType.Crop,Parent=row})Util.Corner(self.Image,math.ceil(size/2))Util.Stroke(
 self.Image,'Outline')end Library.Assets.SetIcon(self.Image,image)end function
 Groupbox:Destroy()self.Frame:Destroy()end function Library._Groupbox(column,name
-,icon)name=Library.Translate(name or'')local frame=card(column,name)local header
-=New('TextButton',{Name='Header',Size=UDim2.new(1,0,0,40),BackgroundTransparency
-=1,Parent=frame})local left=14 if icon and icon~=''then local image=New(
-'ImageLabel',{AnchorPoint=Vector2.new(0,0.5),Position=UDim2.new(0,13,0.5,0),Size
-=UDim2.fromOffset(19,19),BackgroundTransparency=1,ImageColor3='Accent',Parent=
-header})Library.Assets.SetIcon(image,icon)left=41 end local title=New(
-'TextLabel',{Position=UDim2.fromOffset(left,0),Size=UDim2.new(1,-left-34,1,0),
-BackgroundTransparency=1,Text=name,FontFace='FontBold',TextSize=14,
+,icon,collapsed)name=Library.Translate(name or'')local frame=card(column,name)
+local header=New('TextButton',{Name='Header',Size=UDim2.new(1,0,0,40),
+BackgroundTransparency=1,Parent=frame})local left=14 if icon and icon~=''then
+local image=New('ImageLabel',{AnchorPoint=Vector2.new(0,0.5),Position=UDim2.new(
+0,13,0.5,0),Size=UDim2.fromOffset(19,19),BackgroundTransparency=1,ImageColor3=
+'Accent',Parent=header})Library.Assets.SetIcon(image,icon)left=41 end local
+title=New('TextLabel',{Position=UDim2.fromOffset(left,0),Size=UDim2.new(1,-left-
+34,1,0),BackgroundTransparency=1,Text=name,FontFace='FontBold',TextSize=14,
 TextXAlignment=Enum.TextXAlignment.Left,TextTruncate=Enum.TextTruncate.AtEnd,
 Parent=header})local arrow=Util.Chevron(header,'Dim')arrow.AnchorPoint=Vector2.
 new(1,0.5)arrow.Position=UDim2.new(1,-14,0.5,0)local clip,content=body(frame)
@@ -1612,167 +1612,168 @@ local self=setmetatable({Type='Groupbox',Name=name,Frame=frame,Header=header,
 Title=title,Arrow=arrow,Clip=clip,Content=content,Elements={},Order=0,Visible=
 true,Collapsed=false},Groupbox)self.Groupbox=self self.Column=column table.
 insert(column.Groupboxes,self)table.insert(Library.Groupboxes,self)Library.
-Layout.RegisterBox(self)Library.Layout.HeaderDrag(self)return self end function
-Library:SetSectionImage(title,image,size)for _,box in ipairs(self.Groupboxes)do
-if box.Name==title then box:SetImage(image,size)end end local profile=self.Tabs.
-Profile if title=='Discord'and profile then profile:SetImage(image)end end local
-Tabbox={}Tabbox.__index=Tabbox local TabboxTab=setmetatable({},Adders)TabboxTab.
-__index=TabboxTab function TabboxTab:Show()local box=self.Tabbox for _,tab in
-ipairs(box.Tabs)do local active=tab==self tab.Clip.Visible=active Util.
-TweenTheme(tab.Button,0.18,{TextColor3=active and'Text'or'Dim'})Util.Tween(tab.
-Underline,0.18,{BackgroundTransparency=active and 0 or 1})end box.Active=self
-end function Tabbox:AddTab(name)name=Library.Translate(name or'')local first=#
-self.Tabs==0 local button=New('TextButton',{Size=UDim2.new(0,0,1,0),
-AutomaticSize=Enum.AutomaticSize.X,BackgroundTransparency=1,Text=name,FontFace=
-'FontSemi',TextSize=13,TextColor3=first and'Text'or'Dim',LayoutOrder=#self.Tabs+
-1,Parent=self.Strip})local underline=New('Frame',{AnchorPoint=Vector2.new(0,1),
-Position=UDim2.new(0,0,1,0),Size=UDim2.new(1,0,0,2),BackgroundColor3='Accent',
-BackgroundTransparency=first and 0 or 1,ZIndex=4,Parent=button})Util.Corner(
-underline,1)local clip,content=body(self.Frame)clip.Visible=first local tab=
-setmetatable({Type='TabboxTab',Name=name,Tabbox=self,Button=button,Underline=
-underline,Clip=clip,Content=content,Elements={},Order=0,Visible=true},TabboxTab)
-tab.Groupbox=self table.insert(self.Tabs,tab)if first then self.Active=tab end
-Library:GiveSignal(button.MouseButton1Click:Connect(function()tab:Show()end))
-return tab end function Tabbox:SetVisible(visible)self.Visible=visible~=false
-self.Frame.Visible=self.Visible and not self.SearchHidden end function Tabbox:
-Resize()end function Library._Tabbox(column,name)local frame=card(column,name or
-'Tabbox')local strip=New('Frame',{Name='Tabs',Position=UDim2.fromOffset(14,0),
-Size=UDim2.new(1,-28,0,39),BackgroundTransparency=1,Parent=frame})Util.List(
-strip,16,Enum.FillDirection.Horizontal,Enum.HorizontalAlignment.Left,Enum.
-VerticalAlignment.Center)local self=setmetatable({Type='Tabbox',Name=name or'',
-Frame=frame,Strip=strip,Tabs={},Visible=true},Tabbox)self.Column=column table.
-insert(column.Groupboxes,self)return self end end end function
-__DARKLUA_BUNDLE_MODULES.o()local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v
-then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end
-do local function __modImpl()return function(Library)local Util=Library.Util
-local New=Util.New local Services=Util.Services local Assets=Library.Assets
-local CELL=160 local RUN={5,6}local COLS=5 local SIT,BLINK,HAPPY,LOVE,LICK,YAWN,
-SLEEP_IN,SLEEP_OUT,STARTLED,DANGLE,WASH,DROWSY=7,8,9,10,11,12,13,14,15,16,17,18
-local NAP_AFTER=20 Library._Cat=function(root)local SIZE=math.floor(52*(Library.
-DPIScale or 1))local Cat={Active=false,Ready=false,Asleep=false,Busy=false}local
-layer=New('Frame',{Name='Cat',Size=UDim2.fromScale(1,1),BackgroundTransparency=1
-,Visible=false,ZIndex=3,Parent=Library.ScreenGui})local holder=New('Frame',{
-AnchorPoint=Vector2.new(0.5,1),Size=UDim2.fromOffset(SIZE,SIZE),
-BackgroundTransparency=1,Parent=layer})local sprite=New('ImageLabel',{
-AnchorPoint=Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),Size=UDim2.
-fromScale(1,1),BackgroundTransparency=1,Parent=holder})local accent=New(
-'ImageLabel',{AnchorPoint=Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),
-Size=UDim2.fromScale(1,1),BackgroundTransparency=1,ImageColor3='Accent',Parent=
-holder})local hit=New('TextButton',{Text='',AutoButtonColor=false,AnchorPoint=
-Vector2.new(0.5,1),Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(0.6,0.75
-),BackgroundTransparency=1,Parent=holder})local heart local pos=Vector2.zero
-local perched,perchX,strollTo=true,0,nil local facing=1 local phase,phaseUntil,
-tired='home',0,false local jump,held,seen=nil,false,false local token,streak,
-lastPet=0,0,0 local lastMouse,lastMove=Vector2.zero,os.clock()local nextBlink,
-nextFidget,nextStroll,nextZ,wakeAt=0,os.clock()+8,os.clock()+4,0,0 local running
-,swing,lastHeldX=false,0,0 local function inset()return Services.GuiService:
-GetGuiInset()end local function edge(x)local at,size=root.AbsolutePosition,root.
-AbsoluteSize return Vector2.new(at.X+math.clamp(x,26,math.max(26,size.X-26)),at.
-Y+3)end local function place()local offset=inset()holder.Position=UDim2.
-fromOffset(pos.X+offset.X,pos.Y+offset.Y)end local function show(pose)Cat.Pose=
-pose local x,y=(pose-1)%COLS*CELL,math.floor((pose-1)/COLS)*CELL local
-rectOffset=Vector2.new(facing<0 and x+CELL or x,y)local rectSize=Vector2.new(
-facing<0 and-CELL or CELL,CELL)sprite.ImageRectOffset,sprite.ImageRectSize=
-rectOffset,rectSize accent.ImageRectOffset,accent.ImageRectSize=rectOffset,
-rectSize end local function play(steps,done)token=token+1 local mine=token Cat.
-Busy,Cat.Asleep=true,false task.spawn(function()for _,step in ipairs(steps)do
-show(step[1])if step[3]then step[3]()end task.wait(step[2])if token~=mine then
-return end end Cat.Busy=false if done then done()else show(SIT)end end)end local 
-function hop()Util.Tween(sprite,0.12,{Position=UDim2.new(0.5,0,1,-10)},Enum.
-EasingStyle.Quad)task.delay(0.12,function()Util.Tween(sprite,0.4,{Position=UDim2
-.fromScale(0.5,1)},Enum.EasingStyle.Bounce)end)end local function float(isHeart,
-side,size)local offset=inset()local x,y=pos.X+offset.X+side,pos.Y+offset.Y-SIZE*
-(isHeart and 0.8 or 0.5)local props={AnchorPoint=Vector2.new(0.5,0.5),Position=
-UDim2.fromOffset(x,y),Size=UDim2.fromOffset(size,size),BackgroundTransparency=1,
-Parent=layer}local item,goal if isHeart then if not heart then return end props.
-Image,props.ScaleType=heart,Enum.ScaleType.Fit props.ImageColor3=Library.Theme.
-Accent item,goal=New('ImageLabel',props),{ImageTransparency=1}else props.Text,
-props.Font,props.TextSize='z',Enum.Font.GothamBold,size props.TextColor3=Library
-.Theme.Accent:Lerp(Color3.new(1,1,1),0.3)item,goal=New('TextLabel',props),{
-TextTransparency=1}end goal.Position=UDim2.fromOffset(x+math.random(-12,12),y-34
-)goal.Rotation=math.random(-18,18)local tween=Services.TweenService:Create(item,
-TweenInfo.new(1.4,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),goal)tween.
-Completed:Once(function()item:Destroy()end)tween:Play()end local function hearts
-(count)for index=1,count do task.delay((index-1)*0.14,function()float(true,math.
-random(-18,18),math.random(10,15))end)end end local function sleep()play({{
-DROWSY,0.8},{YAWN,1},{DROWSY,0.7}},function()Cat.Asleep=true nextZ=os.clock()+
-0.5 wakeAt=os.clock()+math.random(25,45)end)end local function rested(delay)
-tired,strollTo=false,nil phase,phaseUntil='home',os.clock()+delay end local 
-function leap(to,done)local distance=(to()-pos).Magnitude jump={from=pos,to=to,
-start=os.clock(),time=0.3+distance/600,height=26+distance*0.25,done=done}end
-local function finishJump()local done=jump.done pos,jump=jump.to(),nil done()end
-local function step(target,dt,now)local delta=target-pos local distance=delta.
-Magnitude if distance<2 then return true end if distance>260 then running=true
-elseif distance<120 then running=false end pos=pos+delta/distance*math.min(
-distance,(running and 340 or 110)*dt)if math.abs(delta.X)>2 then facing=delta.X>
-0 and 1 or-1 end show(RUN[math.floor(now*(running and 9 or 5))%#RUN+1])return
-false end local function idle(now)show(SIT)sprite.Size=UDim2.new(1,0,1,math.sin(
-now*2.2)*1.2)if now>nextBlink then nextBlink=now+2+math.random()*4 play({{BLINK,
-0.12}})elseif now>nextFidget then nextFidget=now+math.random(10,22)if math.
-random()<0.6 then play({{LICK,0.35},{WASH,0.35},{LICK,0.35},{WASH,0.35},{LICK,
-0.35}})else play({{YAWN,0.9},{DROWSY,0.3}})end end end function Cat:Pet()if not
-self.Ready then return end local now=os.clock()if self.Asleep then play({{
-STARTLED,0.5,hop},{DROWSY,0.9}})rested(math.random(3,6))return end streak=now-
-lastPet<1.6 and streak+1 or 1 lastPet=now if streak>=3 then streak=0 play({{LOVE
-,1.9,function()hop()hearts(5)end}})else play({{HAPPY,1.1,function()hop()hearts(2
-)end}})end end function Cat:SetActive(active)self.Active=active layer.Visible=
-active and self.Ready and not self.Hidden if not active then if jump then
-finishJump()end return end lastMouse=Util.Mouse()if seen then token=token+1 self
-.Busy,self.Asleep=false,true wakeAt=os.clock()+math.random(6,10)rested(0)else
-seen=true perchX=root.AbsoluteSize.X*0.5 phaseUntil=os.clock()+math.random(12,20
-)if self.Ready then play({{HAPPY,0.9,hop}})end end end function Cat:SetVisible(
-visible)self.Hidden=visible==false layer.Visible=self.Active and self.Ready and
-not self.Hidden end local pressAt,dragging Util.Drag(hit,function(pointer)
-pressAt,dragging=pointer,false end,function(pointer)if not dragging and(pointer-
-pressAt).Magnitude>6 then dragging,held,jump,perched=true,true,nil,false token=
-token+1 Cat.Busy,Cat.Asleep=false,false lastHeldX=pointer.X show(DANGLE)end if
-dragging then pos=pointer+Vector2.new(0,SIZE*0.9)end end,function()if not
-dragging then return Cat:Pet()end dragging,held,swing=false,false,0 Util.Tween(
-sprite,0.3,{Rotation=0},Enum.EasingStyle.Back)local at,size=root.
-AbsolutePosition,root.AbsoluteSize if pos.X>at.X and pos.X<at.X+size.X and math.
-abs(pos.Y-at.Y)<SIZE then perched,perchX=true,pos.X-at.X end rested(math.random(
-6,12))play({{STARTLED,0.35,hop},{SIT,0.3}})end)Library:GiveSignal(Services.
-RunService.RenderStepped:Connect(function(dt)if not Cat.Active or not Cat.Ready
-or Cat.Hidden then return end local now=os.clock()local mouse=Util.Mouse()local
-moved=(mouse-lastMouse).Magnitude>1 if moved then lastMouse,lastMove=mouse,now
-end if held then local lean=math.clamp(-(pos.X-lastHeldX)/math.max(dt,0.001)*
-0.04,-32,32)lastHeldX=pos.X swing=swing+(lean-swing)*math.min(dt*8,1)sprite.
-Rotation=swing place()return end if jump then local t=math.min((now-jump.start)/
-jump.time,1)local to=jump.to()if math.abs(to.X-jump.from.X)>2 then facing=to.X>
-jump.from.X and 1 or-1 end pos=jump.from:Lerp(to,t)-Vector2.new(0,math.sin(t*
-math.pi)*jump.height)show(RUN[t<0.6 and 1 or 2])if t>=1 then finishJump()end
-place()return end if perched then pos=edge(perchX)end place()if Cat.Asleep then
-show(now%3.2<1.6 and SLEEP_IN or SLEEP_OUT)if now>nextZ then nextZ=now+1.6
-float(false,SIZE*0.3,math.random(10,14))end if moved and(mouse-(pos-Vector2.new(
-0,SIZE*0.4))).Magnitude<SIZE*1.2 then play({{STARTLED,0.55,hop},{BLINK,0.3}})
-rested(math.random(2,5))elseif now>wakeAt and now-lastMove<4 then play({{DROWSY,
-0.6},{YAWN,1},{DROWSY,0.4}})rested(math.random(3,7))end return end if Cat.Busy
-then return end if phase=='chase'then local view=layer.AbsoluteSize local side=
-pos.X<mouse.X and-1 or 1 local target=Vector2.new(math.clamp(mouse.X+side*SIZE*
-0.8,SIZE/2,view.X-SIZE/2),math.clamp(mouse.Y+SIZE*0.45,SIZE-inset().Y,view.Y-
-inset().Y))local near=(target-pos).Magnitude<(Cat.Moving and 3 or SIZE*0.5)Cat.
-Moving=not near and not step(target,dt,now)if not Cat.Moving then idle(now)if
-now-lastMove>10 or now>phaseUntil then phase,tired,strollTo='return',true,40+
-math.random()*math.max(root.AbsoluteSize.X-80,0)end end elseif phase=='return'
-then local target=edge(strollTo)if(target-pos).Magnitude<170 then local x=
-strollTo leap(function()return edge(x)end,function()perched,perchX,strollTo=true
-,x,nil phase,phaseUntil='home',os.clock()+math.random(14,26)if tired then sleep(
-)end end)else step(target,dt,now)end elseif strollTo then local delta=strollTo-
-perchX if math.abs(delta)<2 then strollTo=nil else facing=delta>0 and 1 or-1
-perchX=perchX+math.clamp(delta,-70*dt,70*dt)show(RUN[math.floor(now*5)%#RUN+1])
-end else idle(now)if now>phaseUntil and now-lastMove<3 then phase,phaseUntil,
-running='chase',now+math.random(30,50),false if perched then local from=pos
-local toward=mouse-from local landing=from+(toward.Magnitude>0 and toward.Unit
-or Vector2.yAxis)*math.min(toward.Magnitude,130)Cat.Busy=false leap(function()
-return landing end,function()perched=false end)end elseif now-lastMove>NAP_AFTER
-then sleep()elseif perched and now>nextStroll then nextStroll=now+math.random(6,
-12)strollTo=40+math.random()*math.max(root.AbsoluteSize.X-80,0)end end end))task
-.spawn(function()local sheet=Assets.Get('cat/body.png')if not sheet then return
-end heart=Assets.Get('cat/heart_mono.png')or Assets.Get('cat/heart.png')sprite.
-Image=sheet accent.Image=Assets.Get('cat/body_accent.png')or''show(SIT)Cat.Ready
-=true layer.Visible=Cat.Active and not Cat.Hidden if Cat.Active then play({{
-HAPPY,0.9,hop}})end end)return Cat end end end function __DARKLUA_BUNDLE_MODULES
-.p()local v=__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}
+Layout.RegisterBox(self)Library.Layout.HeaderDrag(self)if collapsed then self:
+SetCollapsed(true,true)end return self end function Library:SetSectionImage(
+title,image,size)for _,box in ipairs(self.Groupboxes)do if box.Name==title then
+box:SetImage(image,size)end end local profile=self.Tabs.Profile if title==
+'Discord'and profile then profile:SetImage(image)end end local Tabbox={}Tabbox.
+__index=Tabbox local TabboxTab=setmetatable({},Adders)TabboxTab.__index=
+TabboxTab function TabboxTab:Show()local box=self.Tabbox for _,tab in ipairs(box
+.Tabs)do local active=tab==self tab.Clip.Visible=active Util.TweenTheme(tab.
+Button,0.18,{TextColor3=active and'Text'or'Dim'})Util.Tween(tab.Underline,0.18,{
+BackgroundTransparency=active and 0 or 1})end box.Active=self end function
+Tabbox:AddTab(name)name=Library.Translate(name or'')local first=#self.Tabs==0
+local button=New('TextButton',{Size=UDim2.new(0,0,1,0),AutomaticSize=Enum.
+AutomaticSize.X,BackgroundTransparency=1,Text=name,FontFace='FontSemi',TextSize=
+13,TextColor3=first and'Text'or'Dim',LayoutOrder=#self.Tabs+1,Parent=self.Strip}
+)local underline=New('Frame',{AnchorPoint=Vector2.new(0,1),Position=UDim2.new(0,
+0,1,0),Size=UDim2.new(1,0,0,2),BackgroundColor3='Accent',BackgroundTransparency=
+first and 0 or 1,ZIndex=4,Parent=button})Util.Corner(underline,1)local clip,
+content=body(self.Frame)clip.Visible=first local tab=setmetatable({Type=
+'TabboxTab',Name=name,Tabbox=self,Button=button,Underline=underline,Clip=clip,
+Content=content,Elements={},Order=0,Visible=true},TabboxTab)tab.Groupbox=self
+table.insert(self.Tabs,tab)if first then self.Active=tab end Library:GiveSignal(
+button.MouseButton1Click:Connect(function()tab:Show()end))return tab end
+function Tabbox:SetVisible(visible)self.Visible=visible~=false self.Frame.
+Visible=self.Visible and not self.SearchHidden end function Tabbox:Resize()end
+function Library._Tabbox(column,name)local frame=card(column,name or'Tabbox')
+local strip=New('Frame',{Name='Tabs',Position=UDim2.fromOffset(14,0),Size=UDim2.
+new(1,-28,0,39),BackgroundTransparency=1,Parent=frame})Util.List(strip,16,Enum.
+FillDirection.Horizontal,Enum.HorizontalAlignment.Left,Enum.VerticalAlignment.
+Center)local self=setmetatable({Type='Tabbox',Name=name or'',Frame=frame,Strip=
+strip,Tabs={},Visible=true},Tabbox)self.Column=column table.insert(column.
+Groupboxes,self)return self end end end function __DARKLUA_BUNDLE_MODULES.o()
+local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v then v={c=__modImpl()}
+__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end do local function 
+__modImpl()return function(Library)local Util=Library.Util local New=Util.New
+local Services=Util.Services local Assets=Library.Assets local CELL=160 local
+RUN={5,6}local COLS=5 local SIT,BLINK,HAPPY,LOVE,LICK,YAWN,SLEEP_IN,SLEEP_OUT,
+STARTLED,DANGLE,WASH,DROWSY=7,8,9,10,11,12,13,14,15,16,17,18 local NAP_AFTER=20
+Library._Cat=function(root)local SIZE=math.floor(52*(Library.DPIScale or 1))
+local Cat={Active=false,Ready=false,Asleep=false,Busy=false}local layer=New(
+'Frame',{Name='Cat',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Visible=
+false,ZIndex=3,Parent=Library.ScreenGui})local holder=New('Frame',{AnchorPoint=
+Vector2.new(0.5,1),Size=UDim2.fromOffset(SIZE,SIZE),BackgroundTransparency=1,
+Parent=layer})local sprite=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,1),
+Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(1,1),BackgroundTransparency
+=1,Parent=holder})local accent=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,1),
+Position=UDim2.fromScale(0.5,1),Size=UDim2.fromScale(1,1),BackgroundTransparency
+=1,ImageColor3='Accent',Parent=holder})local hit=New('TextButton',{Text='',
+AutoButtonColor=false,AnchorPoint=Vector2.new(0.5,1),Position=UDim2.fromScale(
+0.5,1),Size=UDim2.fromScale(0.6,0.75),BackgroundTransparency=1,Parent=holder})
+local heart local pos=Vector2.zero local perched,perchX,strollTo=true,0,nil
+local facing=1 local phase,phaseUntil,tired='home',0,false local jump,held,seen=
+nil,false,false local token,streak,lastPet=0,0,0 local lastMouse,lastMove=
+Vector2.zero,os.clock()local nextBlink,nextFidget,nextStroll,nextZ,wakeAt=0,os.
+clock()+8,os.clock()+4,0,0 local running,swing,lastHeldX=false,0,0 local 
+function inset()return Services.GuiService:GetGuiInset()end local function edge(
+x)local at,size=root.AbsolutePosition,root.AbsoluteSize return Vector2.new(at.X+
+math.clamp(x,26,math.max(26,size.X-26)),at.Y+3)end local function place()local
+offset=inset()holder.Position=UDim2.fromOffset(pos.X+offset.X,pos.Y+offset.Y)end
+local function show(pose)Cat.Pose=pose local x,y=(pose-1)%COLS*CELL,math.floor((
+pose-1)/COLS)*CELL local rectOffset=Vector2.new(facing<0 and x+CELL or x,y)local
+rectSize=Vector2.new(facing<0 and-CELL or CELL,CELL)sprite.ImageRectOffset,
+sprite.ImageRectSize=rectOffset,rectSize accent.ImageRectOffset,accent.
+ImageRectSize=rectOffset,rectSize end local function play(steps,done)token=token
++1 local mine=token Cat.Busy,Cat.Asleep=true,false task.spawn(function()for _,
+step in ipairs(steps)do show(step[1])if step[3]then step[3]()end task.wait(step[
+2])if token~=mine then return end end Cat.Busy=false if done then done()else
+show(SIT)end end)end local function hop()Util.Tween(sprite,0.12,{Position=UDim2.
+new(0.5,0,1,-10)},Enum.EasingStyle.Quad)task.delay(0.12,function()Util.Tween(
+sprite,0.4,{Position=UDim2.fromScale(0.5,1)},Enum.EasingStyle.Bounce)end)end
+local function float(isHeart,side,size)local offset=inset()local x,y=pos.X+
+offset.X+side,pos.Y+offset.Y-SIZE*(isHeart and 0.8 or 0.5)local props={
+AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromOffset(x,y),Size=UDim2.
+fromOffset(size,size),BackgroundTransparency=1,Parent=layer}local item,goal if
+isHeart then if not heart then return end props.Image,props.ScaleType=heart,Enum
+.ScaleType.Fit props.ImageColor3=Library.Theme.Accent item,goal=New('ImageLabel'
+,props),{ImageTransparency=1}else props.Text,props.Font,props.TextSize='z',Enum.
+Font.GothamBold,size props.TextColor3=Library.Theme.Accent:Lerp(Color3.new(1,1,1
+),0.3)item,goal=New('TextLabel',props),{TextTransparency=1}end goal.Position=
+UDim2.fromOffset(x+math.random(-12,12),y-34)goal.Rotation=math.random(-18,18)
+local tween=Services.TweenService:Create(item,TweenInfo.new(1.4,Enum.EasingStyle
+.Sine,Enum.EasingDirection.Out),goal)tween.Completed:Once(function()item:
+Destroy()end)tween:Play()end local function hearts(count)for index=1,count do
+task.delay((index-1)*0.14,function()float(true,math.random(-18,18),math.random(
+10,15))end)end end local function sleep()play({{DROWSY,0.8},{YAWN,1},{DROWSY,0.7
+}},function()Cat.Asleep=true nextZ=os.clock()+0.5 wakeAt=os.clock()+math.random(
+25,45)end)end local function rested(delay)tired,strollTo=false,nil phase,
+phaseUntil='home',os.clock()+delay end local function leap(to,done)local
+distance=(to()-pos).Magnitude jump={from=pos,to=to,start=os.clock(),time=0.3+
+distance/600,height=26+distance*0.25,done=done}end local function finishJump()
+local done=jump.done pos,jump=jump.to(),nil done()end local function step(target
+,dt,now)local delta=target-pos local distance=delta.Magnitude if distance<2 then
+return true end if distance>260 then running=true elseif distance<120 then
+running=false end pos=pos+delta/distance*math.min(distance,(running and 340 or
+110)*dt)if math.abs(delta.X)>2 then facing=delta.X>0 and 1 or-1 end show(RUN[
+math.floor(now*(running and 9 or 5))%#RUN+1])return false end local function 
+idle(now)show(SIT)sprite.Size=UDim2.new(1,0,1,math.sin(now*2.2)*1.2)if now>
+nextBlink then nextBlink=now+2+math.random()*4 play({{BLINK,0.12}})elseif now>
+nextFidget then nextFidget=now+math.random(10,22)if math.random()<0.6 then play(
+{{LICK,0.35},{WASH,0.35},{LICK,0.35},{WASH,0.35},{LICK,0.35}})else play({{YAWN,
+0.9},{DROWSY,0.3}})end end end function Cat:Pet()if not self.Ready then return
+end local now=os.clock()if self.Asleep then play({{STARTLED,0.5,hop},{DROWSY,0.9
+}})rested(math.random(3,6))return end streak=now-lastPet<1.6 and streak+1 or 1
+lastPet=now if streak>=3 then streak=0 play({{LOVE,1.9,function()hop()hearts(5)
+end}})else play({{HAPPY,1.1,function()hop()hearts(2)end}})end end function Cat:
+SetActive(active)self.Active=active layer.Visible=active and self.Ready and not
+self.Hidden if not active then if jump then finishJump()end return end lastMouse
+=Util.Mouse()if seen then token=token+1 self.Busy,self.Asleep=false,true wakeAt=
+os.clock()+math.random(6,10)rested(0)else seen=true perchX=root.AbsoluteSize.X*
+0.5 phaseUntil=os.clock()+math.random(12,20)if self.Ready then play({{HAPPY,0.9,
+hop}})end end end function Cat:SetVisible(visible)self.Hidden=visible==false
+layer.Visible=self.Active and self.Ready and not self.Hidden end local pressAt,
+dragging Util.Drag(hit,function(pointer)pressAt,dragging=pointer,false end,
+function(pointer)if not dragging and(pointer-pressAt).Magnitude>6 then dragging,
+held,jump,perched=true,true,nil,false token=token+1 Cat.Busy,Cat.Asleep=false,
+false lastHeldX=pointer.X show(DANGLE)end if dragging then pos=pointer+Vector2.
+new(0,SIZE*0.9)end end,function()if not dragging then return Cat:Pet()end
+dragging,held,swing=false,false,0 Util.Tween(sprite,0.3,{Rotation=0},Enum.
+EasingStyle.Back)local at,size=root.AbsolutePosition,root.AbsoluteSize if pos.X>
+at.X and pos.X<at.X+size.X and math.abs(pos.Y-at.Y)<SIZE then perched,perchX=
+true,pos.X-at.X end rested(math.random(6,12))play({{STARTLED,0.35,hop},{SIT,0.3}
+})end)Library:GiveSignal(Services.RunService.RenderStepped:Connect(function(dt)
+if not Cat.Active or not Cat.Ready or Cat.Hidden then return end local now=os.
+clock()local mouse=Util.Mouse()local moved=(mouse-lastMouse).Magnitude>1 if
+moved then lastMouse,lastMove=mouse,now end if held then local lean=math.clamp(-
+(pos.X-lastHeldX)/math.max(dt,0.001)*0.04,-32,32)lastHeldX=pos.X swing=swing+(
+lean-swing)*math.min(dt*8,1)sprite.Rotation=swing place()return end if jump then
+local t=math.min((now-jump.start)/jump.time,1)local to=jump.to()if math.abs(to.X
+-jump.from.X)>2 then facing=to.X>jump.from.X and 1 or-1 end pos=jump.from:Lerp(
+to,t)-Vector2.new(0,math.sin(t*math.pi)*jump.height)show(RUN[t<0.6 and 1 or 2])
+if t>=1 then finishJump()end place()return end if perched then pos=edge(perchX)
+end place()if Cat.Asleep then show(now%3.2<1.6 and SLEEP_IN or SLEEP_OUT)if now>
+nextZ then nextZ=now+1.6 float(false,SIZE*0.3,math.random(10,14))end if moved
+and(mouse-(pos-Vector2.new(0,SIZE*0.4))).Magnitude<SIZE*1.2 then play({{STARTLED
+,0.55,hop},{BLINK,0.3}})rested(math.random(2,5))elseif now>wakeAt and now-
+lastMove<4 then play({{DROWSY,0.6},{YAWN,1},{DROWSY,0.4}})rested(math.random(3,7
+))end return end if Cat.Busy then return end if phase=='chase'then local view=
+layer.AbsoluteSize local side=pos.X<mouse.X and-1 or 1 local target=Vector2.new(
+math.clamp(mouse.X+side*SIZE*0.8,SIZE/2,view.X-SIZE/2),math.clamp(mouse.Y+SIZE*
+0.45,SIZE-inset().Y,view.Y-inset().Y))local near=(target-pos).Magnitude<(Cat.
+Moving and 3 or SIZE*0.5)Cat.Moving=not near and not step(target,dt,now)if not
+Cat.Moving then idle(now)if now-lastMove>10 or now>phaseUntil then phase,tired,
+strollTo='return',true,40+math.random()*math.max(root.AbsoluteSize.X-80,0)end
+end elseif phase=='return'then local target=edge(strollTo)if(target-pos).
+Magnitude<170 then local x=strollTo leap(function()return edge(x)end,function()
+perched,perchX,strollTo=true,x,nil phase,phaseUntil='home',os.clock()+math.
+random(14,26)if tired then sleep()end end)else step(target,dt,now)end elseif
+strollTo then local delta=strollTo-perchX if math.abs(delta)<2 then strollTo=nil
+else facing=delta>0 and 1 or-1 perchX=perchX+math.clamp(delta,-70*dt,70*dt)show(
+RUN[math.floor(now*5)%#RUN+1])end else idle(now)if now>phaseUntil and now-
+lastMove<3 then phase,phaseUntil,running='chase',now+math.random(30,50),false if
+perched then local from=pos local toward=mouse-from local landing=from+(toward.
+Magnitude>0 and toward.Unit or Vector2.yAxis)*math.min(toward.Magnitude,130)Cat.
+Busy=false leap(function()return landing end,function()perched=false end)end
+elseif now-lastMove>NAP_AFTER then sleep()elseif perched and now>nextStroll then
+nextStroll=now+math.random(6,12)strollTo=40+math.random()*math.max(root.
+AbsoluteSize.X-80,0)end end end))task.spawn(function()local sheet=Assets.Get(
+'cat/body.png')if not sheet then return end heart=Assets.Get(
+'cat/heart_mono.png')or Assets.Get('cat/heart.png')sprite.Image=sheet accent.
+Image=Assets.Get('cat/body_accent.png')or''show(SIT)Cat.Ready=true layer.Visible
+=Cat.Active and not Cat.Hidden if Cat.Active then play({{HAPPY,0.9,hop}})end end
+)return Cat end end end function __DARKLUA_BUNDLE_MODULES.p()local v=
+__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}
 __DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c end end do local function 
 __modImpl()return function(Library)local Util=Library.Util local New=Util.New
 local Services=Util.Services local Assets=Library.Assets local Layout={Columns={
@@ -2062,49 +2063,52 @@ inner})Util.List(frame,12)return{Frame=frame,Order=0,Groupboxes={},Owner=owner}
 end local page={Frame=scroll,Left=column(0,0),Right=column(0.5,6)}page.Left.Key,
 page.Right.Key=key..'|L',key..'|R'Library.Layout.RegisterColumn(page.Left)
 Library.Layout.RegisterColumn(page.Right)return page end local PageMethods={}
-function PageMethods:AddLeftGroupbox(name,icon)return Library._Groupbox(self.
-Page.Left,name,icon)end function PageMethods:AddRightGroupbox(name,icon)return
-Library._Groupbox(self.Page.Right,name,icon)end function PageMethods:AddGroupbox
-(info)info=info or{}local side=info.Side==2 or info.Side=='Right'return Library.
-_Groupbox(side and self.Page.Right or self.Page.Left,info.Name,info.IconName or
-info.Icon)end function PageMethods:AddLeftTabbox(name)return Library._Tabbox(
-self.Page.Left,name)end function PageMethods:AddRightTabbox(name)return Library.
-_Tabbox(self.Page.Right,name)end function PageMethods:AddTabbox(info)info=info
-or{}local side=info.Side==2 or info.Side=='Right'return Library._Tabbox(side and
-self.Page.Right or self.Page.Left,info.Name)end function PageMethods:Resize()end
-local SubTab=setmetatable({},{__index=PageMethods})SubTab.__index=SubTab
-function SubTab:Show()local tab=self.Tab for _,sub in ipairs(tab.SubTabs)do
-local active=sub==self sub.Page.Frame.Visible=active Util.TweenTheme(sub.Button,
-0.18,{TextColor3=active and'Text'or'Dim'})Util.Tween(sub.Underline,0.18,{Size=
-UDim2.new(active and 1 or 0,0,0,2)})end tab.ActiveSub=self tab.Window:Flash()
-Library:ClosePopup()tab:RefreshEmpty()end local Tab=setmetatable({},{__index=
-PageMethods})Tab.__index=Tab function Tab:_paint(active,instant)local time=
-instant and 0 or 0.2 Util.Tween(self.Button,time,{BackgroundTransparency=active
-and 0.86 or 1})Util.Tween(self.Bar,time,{Size=UDim2.fromOffset(3,active and 22
-or 0)})if self.Icon then Util.TweenTheme(self.Icon,time,{ImageColor3=active and
-'Text'or'Dim'})end if self.Letter then Util.TweenTheme(self.Letter,time,{
-TextColor3=active and'Text'or'Dim'})end end function Tab:Show()local window=self
-.Window if window.ActiveTab==self then return end Library:ClosePopup()local
-previous=window.ActiveTab if previous then previous.Holder.Visible=false
-previous:_paint(false)end window.ActiveTab=self Library.ActiveTab=self self:
-_paint(true)self.Holder.Visible=true window:Flash()self:RefreshEmpty()end
-function Tab:RefreshEmpty()if not self.EmptyLabel then return end local page=(
-self.ActiveSub or self).Page self.EmptyLabel.Visible=#page.Left.Groupboxes+#page
-.Right.Groupboxes==0 end function Tab:SetImage(image)if not self.Avatar then
-self.Avatar=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.
-fromScale(0.5,0.5),Size=UDim2.fromOffset(30,30),BackgroundColor3='Raised',
-ScaleType=Enum.ScaleType.Crop,Parent=self.Button})Util.Corner(self.Avatar,15)
-Util.Stroke(self.Avatar,'Outline')end Assets.SetIcon(self.Avatar,image)if self.
-Icon then self.Icon.Visible=false end if self.Letter then self.Letter.Visible=
-false end end function Tab:AddSubTab(name,icon)name=Library.Translate(name or'')
-if not self.SubBar then self.SubBar=New('Frame',{Name='SubTabs',Size=UDim2.new(1
-,0,0,42),BackgroundTransparency=1,Parent=self.Holder})Util.List(self.SubBar,6,
-Enum.FillDirection.Horizontal,Enum.HorizontalAlignment.Left,Enum.
-VerticalAlignment.Center)New('UIPadding',{PaddingLeft=UDim.new(0,12),PaddingTop=
-UDim.new(0,6),Parent=self.SubBar})self.SubBar.Visible=false self.Page.Frame.
-Visible=false end if#self.SubTabs==1 then self.SubBar.Visible=true self.Pages.
-Position=UDim2.fromOffset(0,38)self.Pages.Size=UDim2.new(1,0,1,-38)end local
-button=New('TextButton',{Size=UDim2.fromOffset(0,26),AutomaticSize=Enum.
+local function place(self,right)local tab,page=self.Tab or self,self.Page if tab
+.Open then return right and page.Right or page.Left,false end return#page.Right.
+Groupboxes<#page.Left.Groupboxes and page.Right or page.Left,true end local 
+function groupbox(self,right,name,icon)local column,collapsed=place(self,right)
+return Library._Groupbox(column,name,icon,collapsed)end function PageMethods:
+AddLeftGroupbox(name,icon)return groupbox(self,false,name,icon)end function
+PageMethods:AddRightGroupbox(name,icon)return groupbox(self,true,name,icon)end
+function PageMethods:AddGroupbox(info)info=info or{}return groupbox(self,info.
+Side==2 or info.Side=='Right',info.Name,info.IconName or info.Icon)end function
+PageMethods:AddLeftTabbox(name)return Library._Tabbox((place(self,false)),name)
+end function PageMethods:AddRightTabbox(name)return Library._Tabbox((place(self,
+true)),name)end function PageMethods:AddTabbox(info)info=info or{}return Library
+._Tabbox((place(self,info.Side==2 or info.Side=='Right')),info.Name)end function
+PageMethods:Resize()end local SubTab=setmetatable({},{__index=PageMethods})
+SubTab.__index=SubTab function SubTab:Show()local tab=self.Tab for _,sub in
+ipairs(tab.SubTabs)do local active=sub==self sub.Page.Frame.Visible=active Util.
+TweenTheme(sub.Button,0.18,{TextColor3=active and'Text'or'Dim'})Util.Tween(sub.
+Underline,0.18,{Size=UDim2.new(active and 1 or 0,0,0,2)})end tab.ActiveSub=self
+tab.Window:Flash()Library:ClosePopup()tab:RefreshEmpty()end local Tab=
+setmetatable({},{__index=PageMethods})Tab.__index=Tab function Tab:_paint(active
+,instant)local time=instant and 0 or 0.2 Util.Tween(self.Button,time,{
+BackgroundTransparency=active and 0.86 or 1})Util.Tween(self.Bar,time,{Size=
+UDim2.fromOffset(3,active and 22 or 0)})if self.Icon then Util.TweenTheme(self.
+Icon,time,{ImageColor3=active and'Text'or'Dim'})end if self.Letter then Util.
+TweenTheme(self.Letter,time,{TextColor3=active and'Text'or'Dim'})end end
+function Tab:Show()local window=self.Window if window.ActiveTab==self then
+return end Library:ClosePopup()local previous=window.ActiveTab if previous then
+previous.Holder.Visible=false previous:_paint(false)end window.ActiveTab=self
+Library.ActiveTab=self self:_paint(true)self.Holder.Visible=true window:Flash()
+self:RefreshEmpty()end function Tab:RefreshEmpty()if not self.EmptyLabel then
+return end local page=(self.ActiveSub or self).Page self.EmptyLabel.Visible=#
+page.Left.Groupboxes+#page.Right.Groupboxes==0 end function Tab:SetImage(image)
+if not self.Avatar then self.Avatar=New('ImageLabel',{AnchorPoint=Vector2.new(
+0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(30,30),
+BackgroundColor3='Raised',ScaleType=Enum.ScaleType.Crop,Parent=self.Button})Util
+.Corner(self.Avatar,15)Util.Stroke(self.Avatar,'Outline')end Assets.SetIcon(self
+.Avatar,image)if self.Icon then self.Icon.Visible=false end if self.Letter then
+self.Letter.Visible=false end end function Tab:AddSubTab(name,icon)name=Library.
+Translate(name or'')if not self.SubBar then self.SubBar=New('Frame',{Name=
+'SubTabs',Size=UDim2.new(1,0,0,42),BackgroundTransparency=1,Parent=self.Holder})
+Util.List(self.SubBar,6,Enum.FillDirection.Horizontal,Enum.HorizontalAlignment.
+Left,Enum.VerticalAlignment.Center)New('UIPadding',{PaddingLeft=UDim.new(0,12),
+PaddingTop=UDim.new(0,6),Parent=self.SubBar})self.SubBar.Visible=false self.Page
+.Frame.Visible=false end if#self.SubTabs==1 then self.SubBar.Visible=true self.
+Pages.Position=UDim2.fromOffset(0,38)self.Pages.Size=UDim2.new(1,0,1,-38)end
+local button=New('TextButton',{Size=UDim2.fromOffset(0,26),AutomaticSize=Enum.
 AutomaticSize.X,BackgroundColor3='AccentSoft',BackgroundTransparency=1,Text=name
 ,FontFace='FontSemi',TextSize=13,TextColor3='Dim',LayoutOrder=#self.SubTabs+1,
 Parent=self.SubBar})Util.Pad(button,10,0)local underline=New('Frame',{
@@ -2129,40 +2133,40 @@ Name=='Profile')and 0 or self.TabCount,Parent=footer and self.Footer or self.
 TabList})Util.Corner(button,10)local bar=New('Frame',{Name='Bar',AnchorPoint=
 Vector2.new(0,0.5),Position=UDim2.new(0,0,0.5,0),Size=UDim2.fromOffset(3,0),
 BackgroundColor3='Accent',Parent=button})Util.Corner(bar,2)local tab=
-setmetatable({Type='Tab',Name=name,Key=info.Key or name,IsFooter=footer,Window=
-self,Button=button,Bar=bar,SubTabs={},Order=self.TabCount},Tab)if footer and(
-info.Name=='UI Settings'or info.Name=='Settings')then info.Icon=
-'settings-minimalistic'end if info.Icon and info.Icon~=''then local icon=21 tab.
-Icon=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.
-fromScale(0.5,0.5),Size=UDim2.fromOffset(icon,icon),BackgroundTransparency=1,
-ImageColor3='Dim',Parent=button})Assets.SetIcon(tab.Icon,info.Icon)else tab.
-Letter=New('TextLabel',{Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Text=
-string.upper(string.sub(name,1,1)),FontFace='FontBold',TextSize=17,TextColor3=
-'Dim',Parent=button})end Library:AddTooltip(button,function()return info.
-Description and(tab.Name..'\n'..info.Description)or tab.Name end)tab.Holder=New(
-'Frame',{Name=name,Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Visible=
-false,Parent=self.Body})tab.Pages=New('Frame',{Name='Pages',Size=UDim2.
-fromScale(1,1),BackgroundTransparency=1,Parent=tab.Holder})tab.Page=newPage(tab.
-Pages,tab.Key,tab)tab.Page.Frame.Visible=true if footer then Library:GiveSignal(
-button.MouseButton1Click:Connect(function()tab:Show()end))else Library.Layout.
-TabDrag(tab)end Util.Hover(button,function()if self.ActiveTab~=tab then Util.
-Tween(button,0.15,{BackgroundTransparency=0.92})end end,function()if self.
-ActiveTab~=tab then Util.Tween(button,0.15,{BackgroundTransparency=1})end end)
-table.insert(self.Tabs,tab)if not info.Custom then Library.Tabs[name]=tab end
-Library.Layout.Schedule()if footer then self.FooterCount+=1 self:_layoutSidebar(
-)end if not self.ActiveTab and not footer and not info.Custom then self.
-ActiveTab=tab Library.ActiveTab=tab tab.Holder.Visible=true tab:_paint(true,true
-)end return tab end function Window:ApplySearch()end function Window:
-_layoutSidebar()local count=self.FooterCount local height=count>0 and(count*44+(
-count-1)*8)or 0 self.Footer.Size=UDim2.new(1,0,0,height)self.Footer.Position=
-UDim2.new(0,0,1,-(height+14))self.Divider.Visible=count>0 self.Divider.Position=
-UDim2.new(0.5,0,1,-(height+24))self.TabList.Size=UDim2.new(1,0,1,count>0 and-(
-height+34)or-8)end function Window:SetTitle(text)self.TitleLabel.Text=Library.
-Translate(text or'')end Window.ChangeTitle=Window.SetTitle function Window:
-SetFooter(text)self.FooterLabel.Text=Library.Translate(text or'')end function
-Window:ShowTabs()end function Window:Toggle(visible)Library:Toggle(visible)end
-function Window:AddDialog(_,info)info=info or{}local shade=New('TextButton',{
-Name='Dialog',Size=UDim2.fromScale(1,1),BackgroundColor3='Black',
+setmetatable({Type='Tab',Name=name,Key=info.Key or name,IsFooter=footer,Open=
+footer or info.Name=='Credits',Window=self,Button=button,Bar=bar,SubTabs={},
+Order=self.TabCount},Tab)if footer and(info.Name=='UI Settings'or info.Name==
+'Settings')then info.Icon='settings-minimalistic'end if info.Icon and info.Icon
+~=''then local icon=21 tab.Icon=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,
+0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(icon,icon),
+BackgroundTransparency=1,ImageColor3='Dim',Parent=button})Assets.SetIcon(tab.
+Icon,info.Icon)else tab.Letter=New('TextLabel',{Size=UDim2.fromScale(1,1),
+BackgroundTransparency=1,Text=string.upper(string.sub(name,1,1)),FontFace=
+'FontBold',TextSize=17,TextColor3='Dim',Parent=button})end Library:AddTooltip(
+button,function()return info.Description and(tab.Name..'\n'..info.Description)or
+tab.Name end)tab.Holder=New('Frame',{Name=name,Size=UDim2.fromScale(1,1),
+BackgroundTransparency=1,Visible=false,Parent=self.Body})tab.Pages=New('Frame',{
+Name='Pages',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Parent=tab.
+Holder})tab.Page=newPage(tab.Pages,tab.Key,tab)tab.Page.Frame.Visible=true if
+footer then Library:GiveSignal(button.MouseButton1Click:Connect(function()tab:
+Show()end))else Library.Layout.TabDrag(tab)end Util.Hover(button,function()if
+self.ActiveTab~=tab then Util.Tween(button,0.15,{BackgroundTransparency=0.92})
+end end,function()if self.ActiveTab~=tab then Util.Tween(button,0.15,{
+BackgroundTransparency=1})end end)table.insert(self.Tabs,tab)if not info.Custom
+then Library.Tabs[name]=tab end Library.Layout.Schedule()if footer then self.
+FooterCount+=1 self:_layoutSidebar()end if not self.ActiveTab and not footer and
+not info.Custom then self.ActiveTab=tab Library.ActiveTab=tab tab.Holder.Visible
+=true tab:_paint(true,true)end return tab end function Window:ApplySearch()end
+function Window:_layoutSidebar()local count=self.FooterCount local height=count>
+0 and(count*44+(count-1)*8)or 0 self.Footer.Size=UDim2.new(1,0,0,height)self.
+Footer.Position=UDim2.new(0,0,1,-(height+14))self.Divider.Visible=count>0 self.
+Divider.Position=UDim2.new(0.5,0,1,-(height+24))self.TabList.Size=UDim2.new(1,0,
+1,count>0 and-(height+34)or-8)end function Window:SetTitle(text)self.TitleLabel.
+Text=Library.Translate(text or'')end Window.ChangeTitle=Window.SetTitle function
+Window:SetFooter(text)self.FooterLabel.Text=Library.Translate(text or'')end
+function Window:ShowTabs()end function Window:Toggle(visible)Library:Toggle(
+visible)end function Window:AddDialog(_,info)info=info or{}local shade=New(
+'TextButton',{Name='Dialog',Size=UDim2.fromScale(1,1),BackgroundColor3='Black',
 BackgroundTransparency=1,ZIndex=40,Parent=self.Main})Util.Corner(shade,16)local
 card=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,
 0.5),Size=UDim2.fromOffset(340,0),AutomaticSize=Enum.AutomaticSize.Y,
