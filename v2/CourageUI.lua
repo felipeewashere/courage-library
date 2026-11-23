@@ -151,7 +151,21 @@ BackgroundColor='Background',MainColor='Main',AccentColor='Accent',OutlineColor=
 [key]=keys[value]or value end pcall(Util.Register,object,mapped)end end end
 function __DARKLUA_BUNDLE_MODULES.b()local v=__DARKLUA_BUNDLE_MODULES.cache.b if
 not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c
-end end do local function __modImpl()return{Map={['badge-info']='info-circle',[
+end end do local function __modImpl()return{Map={['arrow-up-from-line']=
+'arrow-up',['battery-charging']='battery-charge',['bell-ring']='bell-bing',[
+'book-open']='book',['calendar-check']='calendar-mark',['calendar-days']=
+'calendar',['chart-no-axes-combined']='chart',['check-check']=
+'checklist-minimalistic',['chevron-down']='alt-arrow-down',['flower-2']='leaf',[
+'folder-cog']='folder',['git-branch']='branching-paths-up',['graduation-cap']=
+'square-academic-cap',['layout-dashboard']='widget',['life-buoy']='help',[
+'list-filter']='filter',['list-ordered']='list',['log-out']='logout',[
+'moon-star']='moon-stars',['move-diagonal-2']='maximize',['move-up-left']=
+'arrow-left-up',['notebook-pen']='notebook',['package-open']='box',['package-x']
+='box-minimalistic',['paw-print']='paw',['rotate-ccw']='restart',['settings-2']=
+'settings-minimalistic',['shield-off']='shield-cross',['shopping-bag']='bag',[
+'shopping-cart']='cart',['step-back']='skip-previous',['step-forward']=
+'skip-next',['sun-moon']='sun',['trending-up']='graph-up',['volume-2']=
+'volume-loud',['wand-sparkles']='magic-stick-3',['badge-info']='info-circle',[
 'binoculars']='telescope',['brain']='lightbulb-bolt',['check']='check-circle',[
 'circle-dot']='record-circle',['circle-help']='question-circle',['clock']=
 'clock-circle',['code']='code',['coins']='dollar',['copy']='copy',['crosshair']=
@@ -1602,9 +1616,9 @@ local header=New('TextButton',{Name='Header',Size=UDim2.new(1,0,0,40),
 BackgroundTransparency=1,Parent=frame})local left=14 if icon and icon~=''then
 local image=New('ImageLabel',{AnchorPoint=Vector2.new(0,0.5),Position=UDim2.new(
 0,13,0.5,0),Size=UDim2.fromOffset(19,19),BackgroundTransparency=1,ImageColor3=
-'Accent',Parent=header})Library.Assets.SetIcon(image,icon)left=41 end local
-title=New('TextLabel',{Position=UDim2.fromOffset(left,0),Size=UDim2.new(1,-left-
-34,1,0),BackgroundTransparency=1,Text=name,FontFace='FontBold',TextSize=14,
+'Text',Parent=header})Library.Assets.SetIcon(image,icon)left=41 end local title=
+New('TextLabel',{Position=UDim2.fromOffset(left,0),Size=UDim2.new(1,-left-34,1,0
+),BackgroundTransparency=1,Text=name,FontFace='FontBold',TextSize=14,
 TextXAlignment=Enum.TextXAlignment.Left,TextTruncate=Enum.TextTruncate.AtEnd,
 Parent=header})local arrow=Util.Chevron(header,'Dim')arrow.AnchorPoint=Vector2.
 new(1,0.5)arrow.Position=UDim2.new(1,-14,0.5,0)local clip,content=body(frame)
@@ -2085,8 +2099,8 @@ tab.Window:Flash()Library:ClosePopup()tab:RefreshEmpty()end local Tab=
 setmetatable({},{__index=PageMethods})Tab.__index=Tab function Tab:_paint(active
 ,instant)local time=instant and 0 or 0.2 Util.Tween(self.Button,time,{
 BackgroundTransparency=active and 0.86 or 1})Util.Tween(self.Bar,time,{Size=
-UDim2.fromOffset(3,active and 22 or 0)})if self.Icon then Util.TweenTheme(self.
-Icon,time,{ImageColor3=active and'Text'or'Dim'})end if self.Letter then Util.
+UDim2.fromOffset(3,active and 22 or 0)})if self.Icon then Util.Tween(self.Icon,
+time,{ImageTransparency=active and 0 or 0.45})end if self.Letter then Util.
 TweenTheme(self.Letter,time,{TextColor3=active and'Text'or'Dim'})end end
 function Tab:Show()local window=self.Window if window.ActiveTab==self then
 return end Library:ClosePopup()local previous=window.ActiveTab if previous then
@@ -2139,84 +2153,84 @@ Order=self.TabCount},Tab)if footer and(info.Name=='UI Settings'or info.Name==
 'Settings')then info.Icon='settings-minimalistic'end if info.Icon and info.Icon
 ~=''then local icon=21 tab.Icon=New('ImageLabel',{AnchorPoint=Vector2.new(0.5,
 0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(icon,icon),
-BackgroundTransparency=1,ImageColor3='Dim',Parent=button})Assets.SetIcon(tab.
-Icon,info.Icon)else tab.Letter=New('TextLabel',{Size=UDim2.fromScale(1,1),
-BackgroundTransparency=1,Text=string.upper(string.sub(name,1,1)),FontFace=
-'FontBold',TextSize=17,TextColor3='Dim',Parent=button})end Library:AddTooltip(
-button,function()return info.Description and(tab.Name..'\n'..info.Description)or
-tab.Name end)tab.Holder=New('Frame',{Name=name,Size=UDim2.fromScale(1,1),
-BackgroundTransparency=1,Visible=false,Parent=self.Body})tab.Pages=New('Frame',{
-Name='Pages',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Parent=tab.
-Holder})tab.Page=newPage(tab.Pages,tab.Key,tab)tab.Page.Frame.Visible=true if
-footer then Library:GiveSignal(button.MouseButton1Click:Connect(function()tab:
-Show()end))else Library.Layout.TabDrag(tab)end Util.Hover(button,function()if
-self.ActiveTab~=tab then Util.Tween(button,0.15,{BackgroundTransparency=0.92})
-end end,function()if self.ActiveTab~=tab then Util.Tween(button,0.15,{
-BackgroundTransparency=1})end end)table.insert(self.Tabs,tab)if not info.Custom
-then Library.Tabs[name]=tab end Library.Layout.Schedule()if footer then self.
-FooterCount+=1 self:_layoutSidebar()end if not self.ActiveTab and not footer and
-not info.Custom then self.ActiveTab=tab Library.ActiveTab=tab tab.Holder.Visible
-=true tab:_paint(true,true)end return tab end function Window:ApplySearch()end
-function Window:_layoutSidebar()local count=self.FooterCount local height=count>
-0 and(count*44+(count-1)*8)or 0 self.Footer.Size=UDim2.new(1,0,0,height)self.
-Footer.Position=UDim2.new(0,0,1,-(height+14))self.Divider.Visible=count>0 self.
-Divider.Position=UDim2.new(0.5,0,1,-(height+24))self.TabList.Size=UDim2.new(1,0,
-1,count>0 and-(height+34)or-8)end function Window:SetTitle(text)self.TitleLabel.
-Text=Library.Translate(text or'')end Window.ChangeTitle=Window.SetTitle function
-Window:SetFooter(text)self.FooterLabel.Text=Library.Translate(text or'')end
-function Window:ShowTabs()end function Window:Toggle(visible)Library:Toggle(
-visible)end function Window:AddDialog(_,info)info=info or{}local shade=New(
-'TextButton',{Name='Dialog',Size=UDim2.fromScale(1,1),BackgroundColor3='Black',
-BackgroundTransparency=1,ZIndex=40,Parent=self.Main})Util.Corner(shade,16)local
-card=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.fromScale(0.5,
-0.5),Size=UDim2.fromOffset(340,0),AutomaticSize=Enum.AutomaticSize.Y,
-BackgroundColor3='Main',ZIndex=41,Parent=shade})Util.Corner(card,14)Util.Stroke(
-card,'Accent',1,0.4)Util.Pad(card,18,16)Util.List(card,10)local scale=New(
-'UIScale',{Scale=0.9,Parent=card})New('TextLabel',{Size=UDim2.new(1,0,0,20),
-BackgroundTransparency=1,Text=Library.Translate(info.Title or''),FontFace=
-'FontBold',TextSize=16,TextXAlignment=Enum.TextXAlignment.Left,LayoutOrder=1,
-ZIndex=42,Parent=card})New('TextLabel',{Size=UDim2.new(1,0,0,0),AutomaticSize=
-Enum.AutomaticSize.Y,BackgroundTransparency=1,Text=Library.Translate(info.
-Description or''),TextColor3='Dim',TextSize=13,TextWrapped=true,TextXAlignment=
-Enum.TextXAlignment.Left,LayoutOrder=2,ZIndex=42,Parent=card})local row=New(
-'Frame',{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,LayoutOrder=3,ZIndex=
-42,Parent=card})Util.List(row,8,Enum.FillDirection.Horizontal,Enum.
-HorizontalAlignment.Right,Enum.VerticalAlignment.Center)local dialog={}function
-dialog.Dismiss()if not shade.Parent then return end Util.Tween(scale,0.15,{Scale
-=0.92})after(Util.Tween(shade,0.15,{BackgroundTransparency=1}),function()Util.
-Destroy(shade)end)end dialog.Close=dialog.Dismiss local buttons={}for _,button
-in pairs(info.FooterButtons or{})do table.insert(buttons,button)end table.sort(
-buttons,function(a,b)return(a.Order or 0)<(b.Order or 0)end)if#buttons==0 then
-buttons[1]={Title='OK'}end for index,data in ipairs(buttons)do local destructive
-=data.Variant=='Destructive'local primary=data.Variant=='Primary'or destructive
-local button=New('TextButton',{Size=UDim2.fromOffset(0,30),AutomaticSize=Enum.
-AutomaticSize.X,BackgroundColor3=destructive and'Red'or(primary and'Accent'or
-'Raised'),Text=Library.Translate(data.Title or'OK'),FontFace='FontSemi',TextSize
-=13,TextColor3=primary and'White'or'Text',LayoutOrder=index,ZIndex=43,Parent=row
-})Util.Corner(button,8)Util.Pad(button,14,0)button.MouseButton1Click:Connect(
-function()if data.Callback then Util.Safe(data.Callback,dialog)else dialog.
-Dismiss()end end)end Util.Tween(shade,0.2,{BackgroundTransparency=0.45})Util.
-Tween(scale,0.25,{Scale=1},Enum.EasingStyle.Back)return dialog end function
-Window:_animate(open)local root,cover=self.Root,self.Cover local blur=Library.
-BlurEnabled and 12 or 0 if open then root.Visible=true cover.
-BackgroundTransparency=0 Util.Tween(cover,0.22,{BackgroundTransparency=1},Enum.
-EasingStyle.Sine)Util.Tween(Library.Dim,0.22,{BackgroundTransparency=Library.
-DimEnabled and 0.5 or 1},Enum.EasingStyle.Sine)Util.Tween(Library.Tint,0.22,{
-BackgroundTransparency=Library.DimEnabled and 0 or 1},Enum.EasingStyle.Sine)
-Library.Blur.Size=blur else Library.Blur.Size=0 Util.Tween(Library.Dim,0.15,{
-BackgroundTransparency=1},Enum.EasingStyle.Sine)Util.Tween(Library.Tint,0.15,{
-BackgroundTransparency=1},Enum.EasingStyle.Sine)after(Util.Tween(cover,0.12,{
-BackgroundTransparency=0},Enum.EasingStyle.Sine),function()if not Library.
-Toggled then root.Visible=false end end)end end function Window:Flash()local
-veil=self.Veil veil.BackgroundTransparency=0.25 Util.Tween(veil,0.2,{
-BackgroundTransparency=1},Enum.EasingStyle.Sine)end function Library:IsOpen()
-return self.Toggled end function Library:Toggle(visible)local window=self.Window
-if not window then return end if visible==nil then visible=not self.Toggled end
-visible=visible==true if visible==self.Toggled then return end self.Toggled=
-visible self:ClosePopup()self:HideTooltip()window:_animate(visible)if self.Cat
-then self.Cat:SetActive(visible)end self:RefreshPill()end local function 
-glyphButton(parent,x,kind)local button=New('TextButton',{AnchorPoint=Vector2.
-new(1,0.5),Position=UDim2.new(1,x,0.5,0),Size=UDim2.fromOffset(28,28),
+BackgroundTransparency=1,ImageColor3='Text',ImageTransparency=0.45,Parent=button
+})Assets.SetIcon(tab.Icon,info.Icon)else tab.Letter=New('TextLabel',{Size=UDim2.
+fromScale(1,1),BackgroundTransparency=1,Text=string.upper(string.sub(name,1,1)),
+FontFace='FontBold',TextSize=17,TextColor3='Dim',Parent=button})end Library:
+AddTooltip(button,function()return info.Description and(tab.Name..'\n'..info.
+Description)or tab.Name end)tab.Holder=New('Frame',{Name=name,Size=UDim2.
+fromScale(1,1),BackgroundTransparency=1,Visible=false,Parent=self.Body})tab.
+Pages=New('Frame',{Name='Pages',Size=UDim2.fromScale(1,1),BackgroundTransparency
+=1,Parent=tab.Holder})tab.Page=newPage(tab.Pages,tab.Key,tab)tab.Page.Frame.
+Visible=true if footer then Library:GiveSignal(button.MouseButton1Click:Connect(
+function()tab:Show()end))else Library.Layout.TabDrag(tab)end Util.Hover(button,
+function()if self.ActiveTab~=tab then Util.Tween(button,0.15,{
+BackgroundTransparency=0.92})end end,function()if self.ActiveTab~=tab then Util.
+Tween(button,0.15,{BackgroundTransparency=1})end end)table.insert(self.Tabs,tab)
+if not info.Custom then Library.Tabs[name]=tab end Library.Layout.Schedule()if
+footer then self.FooterCount+=1 self:_layoutSidebar()end if not self.ActiveTab
+and not footer and not info.Custom then self.ActiveTab=tab Library.ActiveTab=tab
+tab.Holder.Visible=true tab:_paint(true,true)end return tab end function Window:
+ApplySearch()end function Window:_layoutSidebar()local count=self.FooterCount
+local height=count>0 and(count*44+(count-1)*8)or 0 self.Footer.Size=UDim2.new(1,
+0,0,height)self.Footer.Position=UDim2.new(0,0,1,-(height+14))self.Divider.
+Visible=count>0 self.Divider.Position=UDim2.new(0.5,0,1,-(height+24))self.
+TabList.Size=UDim2.new(1,0,1,count>0 and-(height+34)or-8)end function Window:
+SetTitle(text)self.TitleLabel.Text=Library.Translate(text or'')end Window.
+ChangeTitle=Window.SetTitle function Window:SetFooter(text)self.FooterLabel.Text
+=Library.Translate(text or'')end function Window:ShowTabs()end function Window:
+Toggle(visible)Library:Toggle(visible)end function Window:AddDialog(_,info)info=
+info or{}local shade=New('TextButton',{Name='Dialog',Size=UDim2.fromScale(1,1),
+BackgroundColor3='Black',BackgroundTransparency=1,ZIndex=40,Parent=self.Main})
+Util.Corner(shade,16)local card=New('Frame',{AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(340,0),AutomaticSize=
+Enum.AutomaticSize.Y,BackgroundColor3='Main',ZIndex=41,Parent=shade})Util.
+Corner(card,14)Util.Stroke(card,'Accent',1,0.4)Util.Pad(card,18,16)Util.List(
+card,10)local scale=New('UIScale',{Scale=0.9,Parent=card})New('TextLabel',{Size=
+UDim2.new(1,0,0,20),BackgroundTransparency=1,Text=Library.Translate(info.Title
+or''),FontFace='FontBold',TextSize=16,TextXAlignment=Enum.TextXAlignment.Left,
+LayoutOrder=1,ZIndex=42,Parent=card})New('TextLabel',{Size=UDim2.new(1,0,0,0),
+AutomaticSize=Enum.AutomaticSize.Y,BackgroundTransparency=1,Text=Library.
+Translate(info.Description or''),TextColor3='Dim',TextSize=13,TextWrapped=true,
+TextXAlignment=Enum.TextXAlignment.Left,LayoutOrder=2,ZIndex=42,Parent=card})
+local row=New('Frame',{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,
+LayoutOrder=3,ZIndex=42,Parent=card})Util.List(row,8,Enum.FillDirection.
+Horizontal,Enum.HorizontalAlignment.Right,Enum.VerticalAlignment.Center)local
+dialog={}function dialog.Dismiss()if not shade.Parent then return end Util.
+Tween(scale,0.15,{Scale=0.92})after(Util.Tween(shade,0.15,{
+BackgroundTransparency=1}),function()Util.Destroy(shade)end)end dialog.Close=
+dialog.Dismiss local buttons={}for _,button in pairs(info.FooterButtons or{})do
+table.insert(buttons,button)end table.sort(buttons,function(a,b)return(a.Order
+or 0)<(b.Order or 0)end)if#buttons==0 then buttons[1]={Title='OK'}end for index,
+data in ipairs(buttons)do local destructive=data.Variant=='Destructive'local
+primary=data.Variant=='Primary'or destructive local button=New('TextButton',{
+Size=UDim2.fromOffset(0,30),AutomaticSize=Enum.AutomaticSize.X,BackgroundColor3=
+destructive and'Red'or(primary and'Accent'or'Raised'),Text=Library.Translate(
+data.Title or'OK'),FontFace='FontSemi',TextSize=13,TextColor3=primary and'White'
+or'Text',LayoutOrder=index,ZIndex=43,Parent=row})Util.Corner(button,8)Util.Pad(
+button,14,0)button.MouseButton1Click:Connect(function()if data.Callback then
+Util.Safe(data.Callback,dialog)else dialog.Dismiss()end end)end Util.Tween(shade
+,0.2,{BackgroundTransparency=0.45})Util.Tween(scale,0.25,{Scale=1},Enum.
+EasingStyle.Back)return dialog end function Window:_animate(open)local root,
+cover=self.Root,self.Cover local blur=Library.BlurEnabled and 12 or 0 if open
+then root.Visible=true cover.BackgroundTransparency=0 Util.Tween(cover,0.22,{
+BackgroundTransparency=1},Enum.EasingStyle.Sine)Util.Tween(Library.Dim,0.22,{
+BackgroundTransparency=Library.DimEnabled and 0.5 or 1},Enum.EasingStyle.Sine)
+Util.Tween(Library.Tint,0.22,{BackgroundTransparency=Library.DimEnabled and 0 or
+1},Enum.EasingStyle.Sine)Library.Blur.Size=blur else Library.Blur.Size=0 Util.
+Tween(Library.Dim,0.15,{BackgroundTransparency=1},Enum.EasingStyle.Sine)Util.
+Tween(Library.Tint,0.15,{BackgroundTransparency=1},Enum.EasingStyle.Sine)after(
+Util.Tween(cover,0.12,{BackgroundTransparency=0},Enum.EasingStyle.Sine),function
+()if not Library.Toggled then root.Visible=false end end)end end function Window
+:Flash()local veil=self.Veil veil.BackgroundTransparency=0.25 Util.Tween(veil,
+0.2,{BackgroundTransparency=1},Enum.EasingStyle.Sine)end function Library:IsOpen
+()return self.Toggled end function Library:Toggle(visible)local window=self.
+Window if not window then return end if visible==nil then visible=not self.
+Toggled end visible=visible==true if visible==self.Toggled then return end self.
+Toggled=visible self:ClosePopup()self:HideTooltip()window:_animate(visible)if
+self.Cat then self.Cat:SetActive(visible)end self:RefreshPill()end local 
+function glyphButton(parent,x,kind)local button=New('TextButton',{AnchorPoint=
+Vector2.new(1,0.5),Position=UDim2.new(1,x,0.5,0),Size=UDim2.fromOffset(28,28),
 BackgroundTransparency=1,Parent=parent})local bars={}for _,rotation in ipairs(
 kind=='close'and{45,-45}or{0})do local bar=New('Frame',{AnchorPoint=Vector2.new(
 0.5,0.5),Position=UDim2.fromScale(0.5,0.5),Size=UDim2.fromOffset(14,2),Rotation=
@@ -2226,23 +2240,25 @@ TweenTheme(bar,0.15,{BackgroundColor3=kind=='close'and'Red'or'Text'})end end,
 function()for _,bar in ipairs(bars)do Util.TweenTheme(bar,0.15,{BackgroundColor3
 ='Dim'})end end)return button end function Library:CreateWindow(config)config=
 config or{}local dpi=self.DPIScale local camera=Services.Workspace.CurrentCamera
-local view=camera and camera.ViewportSize or Vector2.new(1280,720)local size=
-config.Size or UDim2.fromOffset(720,600)local showCat=config.Cat~=false local
-width=math.min(size.X.Offset,math.floor((view.X-20)/dpi))local height=math.min(
-size.Y.Offset,math.floor((view.Y-(showCat and 90 or 20))/dpi))if config.
-NotifySide then self:SetNotifySide(config.NotifySide)end if config.ToggleKeybind
-then self.ToggleKeybind=config.ToggleKeybind end local root=New('Frame',{Name=
-'Window',AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0,0.5,showCat
-and 30 or 0),Size=UDim2.fromOffset(width,height),BackgroundTransparency=1,
-Visible=false,Parent=self.Layer})local scale=New('UIScale',{Scale=dpi,Parent=
-root})for _,ring in ipairs({{4,0.86},{9,0.94}})do local glow=New('Frame',{Name=
-'Glow',Size=UDim2.fromScale(1,1),BackgroundTransparency=1,Parent=root})Util.
-Corner(glow,16)Util.Stroke(glow,'Accent',ring[1],ring[2])end local main=New(
-'Frame',{Name='Main',Size=UDim2.fromScale(1,1),BackgroundColor3='Background',
-Parent=root})Util.Corner(main,16)local border=New('UIStroke',{Color=Color3.new(1
-,1,1),Thickness=1.5,ApplyStrokeMode=Enum.ApplyStrokeMode.Border,Parent=main})
-local light=New('UIGradient',{Parent=border})Util.Register(light,{Color=function
-(theme)return ColorSequence.new({ColorSequenceKeypoint.new(0,theme.Outline),
+local view=camera and camera.ViewportSize or Vector2.new(1280,720)if view.X<200
+or view.Y<200 then view=Vector2.new(1920,1080)end local size=config.Size or
+UDim2.fromOffset(720,600)local showCat=config.Cat~=false local width=math.max(
+480,math.min(size.X.Offset,math.floor((view.X-20)/dpi)))local height=math.max(
+360,math.min(size.Y.Offset,math.floor((view.Y-(showCat and 90 or 20))/dpi)))if
+config.NotifySide then self:SetNotifySide(config.NotifySide)end if config.
+ToggleKeybind then self.ToggleKeybind=config.ToggleKeybind end local root=New(
+'Frame',{Name='Window',AnchorPoint=Vector2.new(0.5,0.5),Position=UDim2.new(0.5,0
+,0.5,showCat and 30 or 0),Size=UDim2.fromOffset(width,height),
+BackgroundTransparency=1,Visible=false,Parent=self.Layer})local scale=New(
+'UIScale',{Scale=dpi,Parent=root})for _,ring in ipairs({{4,0.86},{9,0.94}})do
+local glow=New('Frame',{Name='Glow',Size=UDim2.fromScale(1,1),
+BackgroundTransparency=1,Parent=root})Util.Corner(glow,16)Util.Stroke(glow,
+'Accent',ring[1],ring[2])end local main=New('Frame',{Name='Main',Size=UDim2.
+fromScale(1,1),BackgroundColor3='Background',Parent=root})Util.Corner(main,16)
+local border=New('UIStroke',{Color=Color3.new(1,1,1),Thickness=1.5,
+ApplyStrokeMode=Enum.ApplyStrokeMode.Border,Parent=main})local light=New(
+'UIGradient',{Parent=border})Util.Register(light,{Color=function(theme)return
+ColorSequence.new({ColorSequenceKeypoint.new(0,theme.Outline),
 ColorSequenceKeypoint.new(0.42,theme.Outline),ColorSequenceKeypoint.new(0.5,
 theme.Accent:Lerp(Color3.new(1,1,1),0.35)),ColorSequenceKeypoint.new(0.58,theme.
 Outline),ColorSequenceKeypoint.new(1,theme.Outline)})end})Services.TweenService:
