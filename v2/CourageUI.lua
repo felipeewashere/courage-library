@@ -117,7 +117,9 @@ Library.FontFamilies={Gotham='rbxasset://fonts/families/GothamSSm.json',Inter=
 'rbxasset://fonts/families/Ubuntu.json',['Builder Sans']=
 'rbxasset://fonts/families/BuilderSans.json',['Source Sans']=
 'rbxasset://fonts/families/SourceSansPro.json',['Roboto Mono']=
-'rbxasset://fonts/families/RobotoMono.json'}Library.Scheme={FontName='Gotham',
+'rbxasset://fonts/families/RobotoMono.json',Fantasy=
+'rbxasset://fonts/families/Balthazar.json',Code=
+'rbxasset://fonts/families/Inconsolata.json'}Library.Scheme={FontName='Gotham',
 RedColor=rgb(255,86,110)}for key,value in pairs(Library.Themes.Courage)do
 Library.Scheme[key]=value end Library.Theme={}local function fontFamily(font)if
 typeof(font)=='EnumItem'then return Font.fromEnum(font).Family end if typeof(
