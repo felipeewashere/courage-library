@@ -119,84 +119,85 @@ Library.FontFamilies={Gotham='rbxasset://fonts/families/GothamSSm.json',Inter=
 'rbxasset://fonts/families/SourceSansPro.json',['Roboto Mono']=
 'rbxasset://fonts/families/RobotoMono.json',Fantasy=
 'rbxasset://fonts/families/Balthazar.json',Code=
-'rbxasset://fonts/families/Inconsolata.json'}Library.Scheme={FontName='Gotham',
-RedColor=rgb(255,86,110)}for key,value in pairs(Library.Themes.Courage)do
-Library.Scheme[key]=value end Library.Theme={}local function fontFamily(font)if
-typeof(font)=='EnumItem'then return Font.fromEnum(font).Family end if typeof(
-font)=='Font'then return font.Family end return Library.FontFamilies[font]or
-Library.FontFamilies.Gotham end function Library:UpdateColorsUsingRegistry()
-local scheme,theme=self.Scheme,self.Theme local white,black=Color3.new(1,1,1),
-Color3.new(0,0,0)theme.Background=scheme.BackgroundColor theme.Inset=scheme.
-BackgroundColor:Lerp(black,0.28)theme.Main=scheme.MainColor theme.Raised=scheme.
-MainColor:Lerp(scheme.FontColor,0.07)theme.Outline=scheme.OutlineColor theme.
-Accent=scheme.AccentColor theme.AccentDark=scheme.AccentColor:Lerp(black,0.38)
-theme.AccentSoft=scheme.MainColor:Lerp(scheme.AccentColor,0.22)theme.Text=scheme
-.FontColor theme.Dim=scheme.FontColor:Lerp(scheme.MainColor,0.42)theme.Red=
-scheme.RedColor theme.White=white theme.Black=black local custom=scheme.Font
-local family=fontFamily(scheme.FontName)if typeof(custom)=='EnumItem'or(typeof(
-custom)=='Font'and custom~=self.LastFont)then family=fontFamily(custom)end theme
-.Font=Font.new(family,Enum.FontWeight.Medium)scheme.Font=theme.Font self.
-LastFont=theme.Font theme.FontSemi=Font.new(family,Enum.FontWeight.SemiBold)
-theme.FontBold=Font.new(family,Enum.FontWeight.Bold)for object,props in pairs(
-self.Registry)do for key,source in pairs(props)do local ok=pcall(function()if
-type(source)=='function'then object[key]=source(theme)else object[key]=theme[
-source]end end)if not ok then self.Registry[object]=nil break end end end for _,
-listener in ipairs(self.ThemeListeners)do pcall(listener)end end function
-Library:GetThemes()local names=table.clone(self.ThemeOrder)return names end
-function Library:SetTheme(name)local theme=self.Themes[name]if not theme then
-return false end for key,value in pairs(theme)do self.Scheme[key]=value end self
-:UpdateColorsUsingRegistry()return true end function Library:OnThemeChanged(
-listener)table.insert(self.ThemeListeners,listener)end function Library:
-AddToRegistry(object,props)local Util=self.Util local mapped={}local keys={
-BackgroundColor='Background',MainColor='Main',AccentColor='Accent',OutlineColor=
-'Outline',FontColor='Text',RedColor='Red'}for key,value in pairs(props)do mapped
-[key]=keys[value]or value end pcall(Util.Register,object,mapped)end end end
-function __DARKLUA_BUNDLE_MODULES.b()local v=__DARKLUA_BUNDLE_MODULES.cache.b if
-not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c
-end end do local function __modImpl()return{Map={['arrow-up-from-line']=
-'arrow-up',['battery-charging']='battery-charge',['bell-ring']='bell-bing',[
-'book-open']='book',['calendar-check']='calendar-mark',['calendar-days']=
-'calendar',['chart-no-axes-combined']='chart',['check-check']=
-'checklist-minimalistic',['chevron-down']='alt-arrow-down',['flower-2']='leaf',[
-'folder-cog']='folder',['git-branch']='branching-paths-up',['graduation-cap']=
-'square-academic-cap',['layout-dashboard']='widget',['life-buoy']='help',[
-'list-filter']='filter',['list-ordered']='list',['log-out']='logout',[
-'moon-star']='moon-stars',['move-diagonal-2']='maximize',['move-up-left']=
-'arrow-left-up',['notebook-pen']='notebook',['package-open']='box',['package-x']
-='box-minimalistic',['paw-print']='paw',['rotate-ccw']='restart',['settings-2']=
-'settings-minimalistic',['shield-off']='shield-cross',['shopping-bag']='bag',[
-'shopping-cart']='cart',['step-back']='skip-previous',['step-forward']=
-'skip-next',['sun-moon']='sun',['trending-up']='graph-up',['volume-2']=
-'volume-loud',['wand-sparkles']='magic-stick-3',['badge-info']='info-circle',[
-'binoculars']='telescope',['brain']='lightbulb-bolt',['check']='check-circle',[
-'circle-dot']='record-circle',['circle-help']='question-circle',['clock']=
-'clock-circle',['code']='code',['coins']='dollar',['copy']='copy',['crosshair']=
-'target',['download']='download-minimalistic',['file']='file',['flask-conical']=
-'test-tube',['footprints']='walking',['gamepad-2']='gamepad',['globe']='global',
-['hammer']='sledgehammer',['hand']='hand-stars',['hard-drive']='ssd-square',[
-'house']='home',['image']='gallery',['info']='info-circle',['layout-grid']=
-'widget',['link-2']='link',['list-checks']='checklist',['lock']='lock',[
-'map-pin']='map-point',['menu']='hamburger-menu',['message-circle']='chat-round'
-,['moon']='moon',['mouse-pointer-click']='cursor',['music']='music-note',[
-'network']='structure',['notebook-tabs']='notebook',['pencil']='pen',[
-'person-standing']='user-rounded',['plus']='add-circle',['power']='power',[
-'puzzle']='widget-add',['refresh-cw']='refresh',['save']='diskette',['scan-eye']
-='eye-scan',['scan-face']='face-scan-circle',['scroll']='document',[
-'scroll-text']='document-text',['shield-alert']='shield-warning',['skull']=
-'ghost',['sliders-horizontal']='tuning-2',['sparkles']='stars',['sun']='sun',[
-'sword']='fire',['swords']='fire',['tab']='siderbar',['terminal']='code-square',
-['timer']='stopwatch',['trash']='trash-bin-trash',['trash-2']='trash-bin-trash',
-['triangle-alert']='danger-triangle',['users']='users-group-rounded',[
-'venetian-mask']='masks',['wifi']='wi-fi-router',['wrench']=
-'settings-minimalistic',['x']='close-circle',['zap']='bolt'},Icons={['4-k']=
-101120062438598,['accessibility']=93185703470955,['accumulator']=77779477064861,
-['add-circle']=139478909806812,['add-folder']=79676023660166,['add-square']=
-123814080145589,['adhesive-plaster']=103862563694954,['adhesive-plaster-2']=
-137710405817081,['airbuds']=79899601682293,['airbuds-case']=91577497572229,[
-'airbuds-case-charge']=81628313108625,['airbuds-case-minimalistic']=
-101860495296783,['airbuds-case-open']=101161334364687,['airbuds-charge']=
-100856387884674,['airbuds-check']=73717092179504,['airbuds-left']=83620215682090
-,['airbuds-remove']=80866575674358,['airbuds-right']=125657715024097,['alarm']=
+'rbxasset://fonts/families/Inconsolata.json'}Library.Scheme={FontName=
+'Builder Sans',RedColor=rgb(255,86,110)}for key,value in pairs(Library.Themes.
+Courage)do Library.Scheme[key]=value end Library.Theme={}local function 
+fontFamily(font)if typeof(font)=='EnumItem'then return Font.fromEnum(font).
+Family end if typeof(font)=='Font'then return font.Family end return Library.
+FontFamilies[font]or Library.FontFamilies.Gotham end function Library:
+UpdateColorsUsingRegistry()local scheme,theme=self.Scheme,self.Theme local white
+,black=Color3.new(1,1,1),Color3.new(0,0,0)theme.Background=scheme.
+BackgroundColor theme.Inset=scheme.BackgroundColor:Lerp(black,0.28)theme.Main=
+scheme.MainColor theme.Raised=scheme.MainColor:Lerp(scheme.FontColor,0.07)theme.
+Outline=scheme.OutlineColor theme.Accent=scheme.AccentColor theme.AccentDark=
+scheme.AccentColor:Lerp(black,0.38)theme.AccentSoft=scheme.MainColor:Lerp(scheme
+.AccentColor,0.22)theme.Text=scheme.FontColor theme.Dim=scheme.FontColor:Lerp(
+scheme.MainColor,0.42)theme.Red=scheme.RedColor theme.White=white theme.Black=
+black local custom=scheme.Font local family=fontFamily(scheme.FontName)if
+typeof(custom)=='EnumItem'or(typeof(custom)=='Font'and custom~=self.LastFont)
+then family=fontFamily(custom)end theme.Font=Font.new(family,Enum.FontWeight.
+Medium)scheme.Font=theme.Font self.LastFont=theme.Font theme.FontSemi=Font.new(
+family,Enum.FontWeight.SemiBold)theme.FontBold=Font.new(family,Enum.FontWeight.
+Bold)for object,props in pairs(self.Registry)do for key,source in pairs(props)do
+local ok=pcall(function()if type(source)=='function'then object[key]=source(
+theme)else object[key]=theme[source]end end)if not ok then self.Registry[object]
+=nil break end end end for _,listener in ipairs(self.ThemeListeners)do pcall(
+listener)end end function Library:GetThemes()local names=table.clone(self.
+ThemeOrder)return names end function Library:SetTheme(name)local theme=self.
+Themes[name]if not theme then return false end for key,value in pairs(theme)do
+self.Scheme[key]=value end self:UpdateColorsUsingRegistry()return true end
+function Library:OnThemeChanged(listener)table.insert(self.ThemeListeners,
+listener)end function Library:AddToRegistry(object,props)local Util=self.Util
+local mapped={}local keys={BackgroundColor='Background',MainColor='Main',
+AccentColor='Accent',OutlineColor='Outline',FontColor='Text',RedColor='Red'}for
+key,value in pairs(props)do mapped[key]=keys[value]or value end pcall(Util.
+Register,object,mapped)end end end function __DARKLUA_BUNDLE_MODULES.b()local v=
+__DARKLUA_BUNDLE_MODULES.cache.b if not v then v={c=__modImpl()}
+__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c end end do local function 
+__modImpl()return{Map={['arrow-up-from-line']='arrow-up',['battery-charging']=
+'battery-charge',['bell-ring']='bell-bing',['book-open']='book',[
+'calendar-check']='calendar-mark',['calendar-days']='calendar',[
+'chart-no-axes-combined']='chart',['check-check']='checklist-minimalistic',[
+'chevron-down']='alt-arrow-down',['flower-2']='leaf',['folder-cog']='folder',[
+'git-branch']='branching-paths-up',['graduation-cap']='square-academic-cap',[
+'layout-dashboard']='widget',['life-buoy']='help',['list-filter']='filter',[
+'list-ordered']='list',['log-out']='logout',['moon-star']='moon-stars',[
+'move-diagonal-2']='maximize',['move-up-left']='arrow-left-up',['notebook-pen']=
+'notebook',['package-open']='box',['package-x']='box-minimalistic',['paw-print']
+='paw',['rotate-ccw']='restart',['settings-2']='settings-minimalistic',[
+'shield-off']='shield-cross',['shopping-bag']='bag',['shopping-cart']='cart',[
+'step-back']='skip-previous',['step-forward']='skip-next',['sun-moon']='sun',[
+'trending-up']='graph-up',['volume-2']='volume-loud',['wand-sparkles']=
+'magic-stick-3',['badge-info']='info-circle',['binoculars']='telescope',['brain'
+]='lightbulb-bolt',['check']='check-circle',['circle-dot']='record-circle',[
+'circle-help']='question-circle',['clock']='clock-circle',['code']='code',[
+'coins']='dollar',['copy']='copy',['crosshair']='target',['download']=
+'download-minimalistic',['file']='file',['flask-conical']='test-tube',[
+'footprints']='walking',['gamepad-2']='gamepad',['globe']='global',['hammer']=
+'sledgehammer',['hand']='hand-stars',['hard-drive']='ssd-square',['house']=
+'home',['image']='gallery',['info']='info-circle',['layout-grid']='widget',[
+'link-2']='link',['list-checks']='checklist',['lock']='lock',['map-pin']=
+'map-point',['menu']='hamburger-menu',['message-circle']='chat-round',['moon']=
+'moon',['mouse-pointer-click']='cursor',['music']='music-note',['network']=
+'structure',['notebook-tabs']='notebook',['pencil']='pen',['person-standing']=
+'user-rounded',['plus']='add-circle',['power']='power',['puzzle']='widget-add',[
+'refresh-cw']='refresh',['save']='diskette',['scan-eye']='eye-scan',['scan-face'
+]='face-scan-circle',['scroll']='document',['scroll-text']='document-text',[
+'shield-alert']='shield-warning',['skull']='ghost',['sliders-horizontal']=
+'tuning-2',['sparkles']='stars',['sun']='sun',['sword']='fire',['swords']='fire'
+,['tab']='siderbar',['terminal']='code-square',['timer']='stopwatch',['trash']=
+'trash-bin-trash',['trash-2']='trash-bin-trash',['triangle-alert']=
+'danger-triangle',['users']='users-group-rounded',['venetian-mask']='masks',[
+'wifi']='wi-fi-router',['wrench']='settings-minimalistic',['x']='close-circle',[
+'zap']='bolt'},Icons={['4-k']=101120062438598,['accessibility']=93185703470955,[
+'accumulator']=77779477064861,['add-circle']=139478909806812,['add-folder']=
+79676023660166,['add-square']=123814080145589,['adhesive-plaster']=
+103862563694954,['adhesive-plaster-2']=137710405817081,['airbuds']=
+79899601682293,['airbuds-case']=91577497572229,['airbuds-case-charge']=
+81628313108625,['airbuds-case-minimalistic']=101860495296783,[
+'airbuds-case-open']=101161334364687,['airbuds-charge']=100856387884674,[
+'airbuds-check']=73717092179504,['airbuds-left']=83620215682090,[
+'airbuds-remove']=80866575674358,['airbuds-right']=125657715024097,['alarm']=
 87863196054318,['alarm-add']=118832521157694,['alarm-pause']=140034283208649,[
 'alarm-play']=117542211985752,['alarm-remove']=86145891651954,['alarm-sleep']=
 83595096742619,['alarm-turn-off']=94898956597322,['album']=100080266427156,[
